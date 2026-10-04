@@ -1,0 +1,528 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>JS Toolbox CSS233</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: sticky TOC on the left, scannable entries on the right; each entry = short explanation + copyable, runnable code. */
+:root {
+  --bg: #F3F6F7;
+  --surface: #FFFFFF;
+  --ink: #13202A;
+  --muted: #566673;
+  --line: #D6DEE3;
+  --line-soft: #E6ECEF;
+  --accent: #0A6B5C;
+  --accent-soft: #DDF0EB;
+  --on-accent: #FFFFFF;
+  --l4: #0A6B5C;
+  --l5: #A45A00;
+  --hw: #5B45B0;
+  --l4-soft: #DDF0EB;
+  --l5-soft: #FBEBD0;
+  --hw-soft: #E8E3F8;
+  --code-bg: #EBF0F2;
+  --code-ink: #1B2933;
+  --out-bg: #14232B;
+  --out-ink: #D6E7EE;
+  --t-com: #66808E;
+  --t-str: #A2420F;
+  --t-kw: #7233B0;
+  --t-num: #0B6A99;
+  --t-lit: #9A5B00;
+  --focus: #1D6FE0;
+  --flash: #FFF3C4;
+  --font-body: "IBM Plex Sans Thai", "Noto Sans Thai", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0D1418; --surface: #141D23; --ink: #E3EBEF; --muted: #8CA0AC; --line: #25343D; --line-soft: #1D2A32;
+    --accent: #45C4A8; --accent-soft: #12302B; --on-accent: #06201A;
+    --l4: #45C4A8; --l5: #E8A648; --hw: #AC97F2;
+    --l4-soft: #12302B; --l5-soft: #35260F; --hw-soft: #261F45;
+    --code-bg: #0A1115; --code-ink: #D8E4EA; --out-bg: #05090C; --out-ink: #BFE3D6;
+    --t-com: #7592A0; --t-str: #E7A27C; --t-kw: #C6A3F4; --t-num: #74C4F0; --t-lit: #E8B560;
+    --focus: #6FA8FF; --flash: #3A3216;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0D1418; --surface: #141D23; --ink: #E3EBEF; --muted: #8CA0AC; --line: #25343D; --line-soft: #1D2A32;
+  --accent: #45C4A8; --accent-soft: #12302B; --on-accent: #06201A;
+  --l4: #45C4A8; --l5: #E8A648; --hw: #AC97F2;
+  --l4-soft: #12302B; --l5-soft: #35260F; --hw-soft: #261F45;
+  --code-bg: #0A1115; --code-ink: #D8E4EA; --out-bg: #05090C; --out-ink: #BFE3D6;
+  --t-com: #7592A0; --t-str: #E7A27C; --t-kw: #C6A3F4; --t-num: #74C4F0; --t-lit: #E8B560;
+  --focus: #6FA8FF; --flash: #3A3216;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.7;
+  padding-inline: clamp(16px, 4vw, 36px);
+  padding-block: 20px 64px;
+}
+.shell { max-width: 1240px; margin-inline: auto; }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+button { font: inherit; color: inherit; cursor: pointer; }
+a { color: var(--accent); }
+
+/* masthead */
+.mast { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; padding-bottom: 18px; }
+.brand h1 { margin: 0; font-size: 1.75rem; line-height: 1.2; font-weight: 700; letter-spacing: -0.01em; text-wrap: balance; }
+.brand h1 .br { font-family: var(--font-mono); font-weight: 500; color: var(--accent); }
+.brand p { margin: 6px 0 0; color: var(--muted); font-size: 0.9rem; }
+.theme { border: 1px solid var(--line); background: var(--surface); border-radius: 6px; padding: 6px 12px; font-size: 0.85rem; white-space: nowrap; }
+.theme:hover { border-color: var(--muted); }
+
+/* controls */
+.controls { display: grid; gap: 12px; padding-block: 16px; border-block: 1px solid var(--line); }
+.row { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; }
+.search { position: relative; flex: 1 1 320px; min-width: 0; }
+.search input {
+  width: 100%; padding: 10px 12px; font: inherit; color: var(--ink);
+  background: var(--surface); border: 1px solid var(--line); border-radius: 6px;
+}
+.search input::placeholder { color: var(--muted); }
+.count { color: var(--muted); font-size: 0.85rem; font-variant-numeric: tabular-nums; }
+.tabs { display: flex; flex-wrap: wrap; gap: 6px; }
+.tab { padding: 8px 14px; border: 1px solid var(--line); background: var(--surface); border-radius: 6px; font-weight: 500; }
+.tab[aria-selected="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { padding: 4px 12px; border: 1px solid var(--line); background: transparent; border-radius: 999px; font-size: 0.85rem; }
+.chip[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+.lead { margin: 0; color: var(--muted); font-size: 0.9rem; max-width: 80ch; }
+
+/* layout */
+.layout { display: grid; grid-template-columns: 250px minmax(0, 1fr); gap: 44px; padding-top: 24px; }
+.layout.solo { grid-template-columns: minmax(0, 1fr); }
+@media (max-width: 899px) { .layout { grid-template-columns: minmax(0, 1fr); gap: 12px; } }
+
+.toc { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 16px); align-self: start; max-height: calc(100vh - 32px); overflow-y: auto; font-size: 0.88rem; }
+@media (max-width: 899px) { .toc { position: static; max-height: none; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); padding: 8px 12px; } }
+.toc summary { cursor: pointer; font-weight: 600; padding-block: 2px; }
+.toc-group { margin-top: 14px; }
+.toc-group h4 { margin: 0 0 4px; font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+.toc a { display: flex; justify-content: space-between; gap: 8px; padding: 3px 0; color: var(--ink); text-decoration: none; }
+.toc a:hover { color: var(--accent); }
+.toc a span { color: var(--muted); font-variant-numeric: tabular-nums; }
+
+/* sections and entries */
+main { min-width: 0; }
+.sec { scroll-margin-top: 16px; margin-bottom: 40px; }
+.sec-head { display: grid; gap: 4px; padding-bottom: 10px; }
+.sec-head h2 { margin: 0; font-size: 1.5rem; line-height: 1.3; text-wrap: balance; }
+.sec-head p { margin: 0; color: var(--muted); max-width: 75ch; }
+.badge { justify-self: start; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; padding: 2px 8px; border-radius: 4px; }
+.badge.L4 { color: var(--l4); background: var(--l4-soft); }
+.badge.L5 { color: var(--l5); background: var(--l5-soft); }
+.badge.HW { color: var(--hw); background: var(--hw-soft); }
+
+.item { border-top: 1px solid var(--line); padding-block: 22px 8px; scroll-margin-top: 16px; min-width: 0; }
+.item.flash { animation: none; background: var(--flash); }
+.item h3 { margin: 0 0 6px; font-size: 1.1rem; line-height: 1.4; text-wrap: balance; }
+.tags { display: flex; flex-wrap: wrap; gap: 4px 6px; margin-bottom: 10px; }
+.tag { border: 0; background: transparent; padding: 0; font: 500 0.75rem var(--font-mono); color: var(--muted); }
+.tag:hover { color: var(--accent); text-decoration: underline; }
+.prose p, .prose ul { margin: 0 0 10px; max-width: 72ch; }
+.prose ul { padding-left: 1.3em; }
+.prose li { margin-bottom: 2px; }
+code { font-family: var(--font-mono); font-size: 0.86em; background: var(--code-bg); padding: 1px 5px; border-radius: 3px; overflow-wrap: anywhere; }
+.tablewrap { overflow-x: auto; margin: 4px 0 12px; max-width: 100%; }
+table { border-collapse: collapse; font-size: 0.88rem; }
+th, td { text-align: left; padding: 6px 14px 6px 0; border-bottom: 1px solid var(--line); white-space: nowrap; font-family: var(--font-mono); font-size: 0.82rem; }
+th { color: var(--muted); font-weight: 500; }
+
+/* code figure */
+.code { margin: 10px 0 14px; border: 1px solid var(--line); border-radius: 6px; background: var(--code-bg); overflow: hidden; min-width: 0; }
+.bar { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 5px 6px 5px 12px; border-bottom: 1px solid var(--line); }
+.lang { font: 500 0.68rem var(--font-mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.acts { display: flex; gap: 4px; }
+.btn { border: 1px solid var(--line); background: var(--surface); border-radius: 4px; padding: 2px 10px; font-size: 0.78rem; font-weight: 500; }
+.btn:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+.btn.run { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.btn.run:hover:not(:disabled) { color: var(--on-accent); filter: brightness(1.08); }
+.btn:disabled { opacity: 0.6; cursor: default; }
+pre { margin: 0; padding: 12px 14px; overflow-x: auto; font: 400 0.8rem/1.65 var(--font-mono); color: var(--code-ink); tab-size: 2; }
+pre code { background: none; padding: 0; font-size: inherit; overflow-wrap: normal; }
+.out { background: var(--out-bg); color: var(--out-ink); border-top: 1px solid var(--line); white-space: pre-wrap; overflow-wrap: anywhere; max-height: 280px; overflow-y: auto; }
+.out::before { content: "CONSOLE"; display: block; font-size: 0.62rem; letter-spacing: 0.14em; opacity: 0.6; margin-bottom: 4px; }
+.t-com { color: var(--t-com); font-style: italic; }
+.t-str { color: var(--t-str); }
+.t-kw { color: var(--t-kw); }
+.t-num { color: var(--t-num); }
+.t-lit { color: var(--t-lit); }
+
+/* problems view */
+.prob { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr); gap: 8px 32px; border-top: 1px solid var(--line); padding-block: 18px 8px; }
+@media (max-width: 760px) { .prob { grid-template-columns: minmax(0, 1fr); } }
+.prob h3 { margin: 0; font-size: 1rem; line-height: 1.5; text-wrap: balance; }
+.prob .badge { margin-bottom: 6px; display: inline-block; }
+.prob .ans { margin: 0 0 8px; }
+.prob .code { margin-top: 6px; }
+.jump { border: 0; background: transparent; padding: 0; color: var(--accent); text-decoration: underline; font-size: 0.86rem; margin-bottom: 8px; text-align: left; }
+.empty { padding: 40px 0; color: var(--muted); }
+</style>
+
+<div class="shell">
+  <header class="mast">
+    <div class="brand">
+      <h1><span class="br">{ }</span> JS Toolbox</h1>
+      <p>CSS233 Web Programming I · สรุป Lecture 4 + 5 · คัดลอกโค้ดไปใช้ได้ทันที</p>
+    </div>
+    <button class="theme" id="theme" type="button">สลับธีม</button>
+  </header>
+
+  <section class="controls" aria-label="ค้นหาและกรอง">
+    <div class="row">
+      <div class="search">
+        <input id="q" type="search" autocomplete="off" placeholder="ค้นหา เช่น map, closure, fetch, ??, this, debounce" aria-label="ค้นหา">
+      </div>
+      <span class="count" id="count" aria-live="polite"></span>
+    </div>
+    <div class="row">
+      <div class="tabs" role="tablist" aria-label="มุมมอง">
+        <button class="tab" role="tab" data-view="tools" aria-selected="true" type="button">เครื่องมือและโค้ด</button>
+        <button class="tab" role="tab" data-view="problems" aria-selected="false" type="button">เจอโจทย์แบบนี้ → ใช้อะไร</button>
+      </div>
+      <div class="chips" id="chips" role="group" aria-label="กรองตามเนื้อหา">
+        <button class="chip" data-lec="all" aria-pressed="true" type="button">ทั้งหมด</button>
+        <button class="chip" data-lec="L4" aria-pressed="false" type="button">Lecture 4</button>
+        <button class="chip" data-lec="L5" aria-pressed="false" type="button">Lecture 5</button>
+        <button class="chip" data-lec="HW" aria-pressed="false" type="button">แบบฝึกหัด</button>
+      </div>
+    </div>
+    <p class="lead" id="lead"></p>
+  </section>
+
+  <div class="layout" id="layout">
+    <details class="toc" id="toc"><summary>สารบัญ</summary><div id="toc-body"></div></details>
+    <main id="main"></main>
+  </div>
+</div>
+
+<script id="data" type="application/json">{"sections":[{"lec":"L4","id":"types","title":"ชนิดข้อมูล","blurb":"ตัวแปรใน JS ไม่มีชนิด แต่ \"ค่า\" ที่เก็บอยู่มีชนิด","items":[{"id":"typeof","title":"ชนิดข้อมูลและ typeof","tags":["type","primitive"],"text":"JS มี primitive 7 ชนิด: Boolean, Number, BigInt, String, Symbol, Null, Undefined และมี Object types เช่น Array, Date, Function. ตัวดำเนินการ `typeof` คืนค่าเป็น **string** บอกชนิดของค่า.\n\n- `typeof null` ได้ `\"object\"` (เป็นข้อยกเว้นที่ต้องจำ)\n- Array ก็ได้ `\"object\"` เช่นกัน","blocks":[{"lang":"js","run":true,"code":"console.log(typeof true);           // boolean\nconsole.log(typeof 3.14);           // number\nconsole.log(typeof 10n);            // bigint\nconsole.log(typeof \"hi\");           // string\nconsole.log(typeof Symbol(\"x\"));    // symbol\nconsole.log(typeof undefined);      // undefined\nconsole.log(typeof null);           // object\nconsole.log(typeof [1, 2]);         // object\nconsole.log(typeof function () {}); // function"}]},{"id":"null-undefined","title":"null กับ undefined","tags":["null","undefined"],"text":"ทั้งสองแปลว่า \"ไม่มีค่า\". `undefined` คือค่าของตัวแปรที่ยังไม่ได้ใส่ค่า หรือ property/element ที่ไม่มีอยู่. `null` คือค่าที่เรากำหนดเองเพื่อบอกว่า \"ว่าง\". `==` มองว่าเท่ากัน แต่ `===` ไม่เท่า.","blocks":[{"lang":"js","run":true,"code":"let a;\nconst obj = {};\nconsole.log(a);                   // undefined (ยังไม่ใส่ค่า)\nconsole.log(obj.missing);         // undefined (ไม่มี property)\nconsole.log(null == undefined);   // true\nconsole.log(null === undefined);  // false"}]}]},{"lec":"L4","id":"numbers","title":"ตัวเลข","blurb":"Number เป็น floating point 64 บิต ไม่มี integer แยก","items":[{"id":"number-literals","title":"รูปแบบการเขียนตัวเลข","tags":["number","hex","binary"],"text":"เลขฐาน 16 ขึ้นต้น `0x`, ฐาน 2 ขึ้นต้น `0b`, ฐาน 8 ขึ้นต้น `0o`. เขียนแบบวิทยาศาสตร์ด้วย `e`. ใช้ `_` คั่นหลักเพื่อให้อ่านง่าย (ไม่มีผลต่อค่า).","blocks":[{"lang":"js","run":true,"code":"console.log(0xff);        // 255\nconsole.log(0b10101);     // 21\nconsole.log(0o377);       // 255\nconsole.log(6.02e23);     // 6.02e+23\nlet billion = 1_000_000_000;\nlet bytes = 0x89_AB_CD_EF;\nlet fraction = 0.123_456_789;\nconsole.log(billion, bytes, fraction);"}]},{"id":"number-special","title":"Infinity, NaN และฟังก์ชันของ Number","tags":["number","NaN","Infinity","isNaN"],"text":"คำนวณเกินช่วงไม่ error: ล้นได้ `Infinity`, หารศูนย์ได้ `Infinity` หรือ `-Infinity`, ส่วน `0/0` ได้ `NaN` (Not a Number). `NaN` ไม่เท่ากับตัวเอง จึงต้องใช้ `Number.isNaN()` ตรวจ.","blocks":[{"lang":"js","run":true,"code":"console.log(1 / 0);                    // Infinity\nconsole.log(-1 / 0);                   // -Infinity\nconsole.log(Number.MAX_VALUE * 2);     // Infinity (overflow)\nconsole.log(0 / 0);                    // NaN\nconsole.log(Number.MIN_VALUE / 2);     // 0 (underflow)\nconsole.log(NaN === NaN);              // false\nconsole.log(Number.isNaN(0 / 0));      // true\nconsole.log(Number.isFinite(1 / 0));   // false\nconsole.log(Number.isInteger(5.0));    // true\nconsole.log(Number.isSafeInteger(2 ** 53)); // false\nconsole.log(Number.MAX_SAFE_INTEGER);  // 9007199254740991\nconsole.log(Number.parseInt(\"42px\"), Number.parseFloat(\"3.14abc\")); // 42 3.14"}]},{"id":"float-precision","title":"ทศนิยมคลาดเคลื่อน","tags":["number","float","rounding"],"text":"ตัวเลขทศนิยมใน JS เป็นค่าประมาณ จึงเกิดการคลาดเคลื่อนแบบ `0.1 + 0.2`. ห้ามเทียบด้วย `===` ตรง ๆ ให้เทียบความต่างกับ `Number.EPSILON` หรือคิดเป็นจำนวนเต็ม (เช่น สตางค์) แล้วค่อยหาร.","blocks":[{"lang":"js","run":true,"code":"console.log(0.1 + 0.2);                       // 0.30000000000000004\nconsole.log(0.1 + 0.2 === 0.3);               // false\nconsole.log(Math.abs(0.1 + 0.2 - 0.3) \u003c Number.EPSILON); // true\nconsole.log((0.1 + 0.2).toFixed(2));          // \"0.30\" (ได้ string)\nconsole.log((10 + 20) / 100);                 // 0.3 (คิดเป็นหน่วยย่อยก่อน)"}]},{"id":"bigint","title":"BigInt","tags":["number","bigint"],"text":"ใช้เมื่อต้องการจำนวนเต็มที่ใหญ่เกิน `Number.MAX_SAFE_INTEGER`. ลงท้ายด้วย `n`. บวกลบคูณหารกันได้เฉพาะ BigInt ด้วยกัน (หารได้ผลเป็นจำนวนเต็ม). เทียบกับ Number ด้วย `\u003c`, `>`, `==` ได้ แต่ `===` ไม่เท่า เพราะชนิดต่างกัน.","blocks":[{"lang":"js","run":true,"code":"console.log(1000n + 2000n);   // 3000n\nconsole.log(3000n / 997n);    // 3n (ได้แค่ผลหารจำนวนเต็ม)\nconsole.log(3000n % 997n);    // 9n\nconsole.log(BigInt(Number.MAX_SAFE_INTEGER) + 2n); // 9007199254740993n\nconsole.log(1 \u003c 2n, 0 == 0n, 0 === 0n);            // true true false\ntry { console.log(1n + 1); } catch (e) { console.log(e.name); } // TypeError"}]}]},{"lec":"L4","id":"strings","title":"ข้อความ (String)","blurb":"ความยาวนับเป็นค่า 16 บิต, index เริ่มที่ 0, string แก้ไขตรง ๆ ไม่ได้","items":[{"id":"string-literals","title":"การเขียน string และ escape","tags":["string","quote","escape"],"text":"ใช้ `'...'`, `\"...\"` หรือ backtick. อักขระพิเศษใช้ `\\` นำหน้า.\n\n- `\\n` ขึ้นบรรทัดใหม่, `\\t` tab, `\\\\` backslash\n- `\\\"` และ `\\'` ใส่เครื่องหมายคำพูดใน string\n- `\\xnn`, `\\unnnn`, `\\u{n}` ระบุตัวอักษร Unicode","blocks":[{"lang":"js","run":true,"code":"console.log('two\\nlines');\nconsole.log(\"She said \\\"hi\\\"\");\nconsole.log('name=\"myform\"');\nconsole.log(\"tab:\\tend\");\nconsole.log(\"π = pi\", \"\\u{1F600}\".length);   // อักขระนอก 16 บิต length = 2"}]},{"id":"string-methods","title":"เมธอดของ string","tags":["string","slice","split","includes","trim","replace"],"text":"ตัดส่วน (`slice`, `substring`, `split`), ค้นหา (`indexOf`, `includes`, `startsWith`, `endsWith`), แก้รูปแบบ (`replace`, `toUpperCase`, `trim`, `padStart`, `repeat`). ทุกเมธอดคืน string ใหม่ ต้นฉบับไม่เปลี่ยน.","blocks":[{"lang":"js","run":true,"code":"let s = \"Hello, world\";\nconsole.log(s.length, s[0], s[s.length - 1]);  // 12 H d\n// ตัดส่วน\nconsole.log(s.substring(1, 4));  // ell\nconsole.log(s.slice(1, 4));      // ell\nconsole.log(s.slice(-3));        // rld\nconsole.log(s.split(\", \"));      // [ 'Hello', 'world' ]\n// ค้นหา\nconsole.log(s.indexOf(\"l\"));        // 2\nconsole.log(s.indexOf(\"l\", 3));     // 3\nconsole.log(s.indexOf(\"zz\"));       // -1\nconsole.log(s.lastIndexOf(\"l\"));    // 10\nconsole.log(s.startsWith(\"Hell\"), s.endsWith(\"!\"), s.includes(\"or\")); // true false true\n// แก้รูปแบบ\nconsole.log(s.replace(\"llo\", \"ya\"));   // Heya, world\nconsole.log(s.toLowerCase(), s.toUpperCase());\nconsole.log(\"x\".padStart(3, \"*\"), \"x\".padEnd(3, \"-\"));  // **x x--\nconsole.log(\"  test  \".trim() + \"|\", \"  test  \".trimStart() + \"|\", \"  test  \".trimEnd() + \"|\");\nconsole.log(\"\u003c>\".repeat(5));"}]},{"id":"template-literals","title":"Template literal","tags":["string","template","backtick"],"text":"ใช้ backtick แล้วแทรก expression ด้วย `${...}`. ขึ้นบรรทัดใหม่ในโค้ดแล้วเป็นบรรทัดใหม่ใน string จริง.","blocks":[{"lang":"js","run":true,"code":"let name = \"Bill\";\nlet greeting = `Hello ${name}.`;\nconsole.log(greeting);\nconsole.log(`1 + 2 = ${1 + 2}`);\nconsole.log(`บรรทัดที่ 1\nบรรทัดที่ 2`);"}]}]},{"lec":"L4","id":"conv","title":"Boolean, การแปลงชนิด, ความเท่ากัน","blurb":"JS ยืดหยุ่นเรื่องชนิดมาก จึงต้องรู้กฎการแปลง","items":[{"id":"falsy","title":"ค่า falsy และ truthy","tags":["boolean","falsy","truthy"],"text":"ค่าที่ถือเป็น `false`: `undefined`, `null`, `0`, `-0`, `NaN`, `\"\"`. ค่าอื่นทั้งหมดเป็น `true` รวมถึง object, array (แม้ว่าง) และ string `\"0\"`.","blocks":[{"lang":"js","run":true,"code":"const cases = [\n  [\"undefined\", undefined], [\"null\", null], [\"0\", 0], [\"NaN\", NaN],\n  ['\"\"', \"\"], ['\"0\"', \"0\"], [\"[]\", []], [\"{}\", {}]\n];\nfor (const [label, v] of cases) console.log(label, \"->\", Boolean(v));"}]},{"id":"type-conversion","title":"การแปลงชนิดอัตโนมัติ","tags":["convert","Number","String"],"text":"`+` ที่มี string ด้านใดด้านหนึ่งจะต่อข้อความ. `*`, `-`, `/` จะแปลงทั้งสองข้างเป็นตัวเลข. แปลงไม่ได้จะได้ `NaN`.","blocks":[{"lang":"js","run":true,"code":"console.log(10 + \"objects\");    // \"10 objects\"\nconsole.log(\"7\" * \"4\");         // 28\nlet n = 1 - \"x\";\nconsole.log(n);                 // NaN\nconsole.log(n + \"objects\");     // \"NaN objects\"\nconsole.log(Number(\"\"), Number(\"1.2\"), Number(\"one\"));   // 0 1.2 NaN\nconsole.log(Number(null), Number(undefined), Number(true)); // 0 NaN 1\nconsole.log(Number([]), Number([9]), Number([\"a\"]));     // 0 9 NaN\nconsole.log(String(null), String(true), String([1, 2])); // null true 1,2"}]},{"id":"equality","title":"== กับ ===","tags":["equality","strict"],"text":"`==` และ `!=` แปลงชนิดก่อนเทียบ ผลลัพธ์จึงคาดเดายาก. สไลด์แนะนำให้ใช้ **`===` และ `!==` เสมอ**.","blocks":[{"lang":"js","run":true,"code":"console.log(\"\" == \"0\");    // false\nconsole.log(\"\" == 0);      // true\nconsole.log(0 == \"0\");     // true\nconsole.log(NaN == NaN);   // false\nconsole.log([\"\"] == \"\");   // true\nconsole.log(true == 1);    // true\nconsole.log(false == 0);   // true\nconsole.log(false == undefined, false == null, null == undefined); // false false true\n// ใช้ === แทน\nconsole.log(0 === \"0\", \"\" === 0, null === undefined); // false false false"}]}]},{"lec":"L4","id":"vars","title":"ตัวแปร ขอบเขต และการตั้งชื่อ","blurb":"ใช้ const เป็นค่าเริ่มต้น, let เมื่อต้อง reassign, ไม่ใช้ var","items":[{"id":"declare","title":"let และ const","tags":["let","const","declare"],"text":"`let` ประกาศตัวแปรที่เปลี่ยนค่าได้ ส่วน `const` ต้องใส่ค่าตั้งแต่ประกาศและ reassign ไม่ได้. `const` กับ array/object ห้ามชี้ไปที่ใหม่ แต่แก้เนื้อในได้ (ไม่ได้แปลว่า immutable). ทั้งคู่มี block scope.","blocks":[{"lang":"js","run":true,"code":"let message = \"hello\";\nlet i = 0, j = 0, k = 0;\nlet x = 2, y = x * x;          // initializer ใช้ตัวแปรก่อนหน้าได้\nconst H0 = 74;                 // ค่าคงที่ตัวพิมพ์ใหญ่\nconst list = [1, 2, 3];\nlist.push(4);                  // OK: แก้เนื้อใน array ได้\nconsole.log(list, y);\ntry { H0 = 0; } catch (e) { console.log(e.name); }   // TypeError"}]},{"id":"scope-let-var","title":"block scope: let กับ var","tags":["scope","var","let","block"],"text":"block คือชุดคำสั่งในวงเล็บปีกกา `{ }` (ไม่เกี่ยวกับ block element ของ CSS). `let`/`const` อยู่แค่ใน block ส่วน `var` อยู่ทั้งฟังก์ชัน จึง \"รั่ว\" ออกนอก `for`/`if` ได้.\n\n| ตัวประกาศ | Scope | Reassign | Redeclare |\n|---|---|---|---|\n| var | Function | ได้ | ได้ |\n| let | Block | ได้ | ไม่ได้ |\n| const | Block | ไม่ได้ | ไม่ได้ |","blocks":[{"lang":"js","run":true,"code":"function withLet() {\n  for (let i = 0; i \u003c 3; i++) {}\n  try { console.log(i); } catch (e) { console.log(\"let:\", e.name); }  // ReferenceError\n}\nfunction withVar() {\n  for (var i = 0; i \u003c 3; i++) {}\n  console.log(\"var:\", i);    // 3 (รั่วออกนอก block)\n}\nwithLet();\nwithVar();"}]},{"id":"naming","title":"กฎการตั้งชื่อและ coding style","tags":["naming","camelCase","convention"],"text":"ชื่อตัวแปรใช้ตัวอักษร ตัวเลข `$` `_` ได้ ห้ามขึ้นต้นด้วยตัวเลข และแยกตัวพิมพ์เล็กใหญ่.\n\n- **camelCase**: `userName`, `cartTotal` สำหรับตัวแปร ฟังก์ชัน property\n- **PascalCase**: `UserProfile` สำหรับ class, constructor, React component\n- **UPPER_CASE**: `MAX_LIMIT`, `API_KEY` สำหรับค่าคงที่ที่ hard-code\n- **snake_case**: `user_name` พบใน Python และชื่อคอลัมน์ฐานข้อมูล\n- **kebab-case**: `user-name` ใช้กับ CSS class และชื่อไฟล์ (ใช้เป็นชื่อตัวแปร JS ไม่ได้)\n- ไม่ใช้ตัวแปรเดียวกันซ้ำหลายหน้าที่ ตัวแปรเพิ่มช่วยให้อ่านและ debug ง่ายขึ้น","blocks":[{"lang":"js","run":false,"code":"const COLOR_RED = \"#F00\";\nconst COLOR_ORANGE = \"#FF7F00\";\nlet userName = \"Alice\";\nlet $ = 1;\nlet _ = 2;\n// let 2fast = 1;   // ผิด: ขึ้นต้นด้วยตัวเลขไม่ได้"}]},{"id":"ternary","title":"Ternary operator ? :","tags":["ternary","condition","if"],"text":"เขียน if/else แบบสั้นในบรรทัดเดียว เหมาะกับเงื่อนไขง่าย ๆ ที่ต้องได้ค่ากลับมา.","blocks":[{"lang":"js","run":true,"code":"let age = 20;\nlet access = age >= 18 ? \"Allowed\" : \"Denied\";\nconsole.log(access);                       // Allowed\nconst score = 42;\nconsole.log(`Status: ${score >= 50 ? \"Pass\" : \"Fail\"}`);   // ใช้ใน template ได้"}]}]},{"lec":"L4","id":"html","title":"JavaScript ใน HTML","blurb":"ใส่ด้วยแท็ก script และเลือกจังหวะที่โค้ดทำงาน","items":[{"id":"script-tag","title":"แท็ก script, src, defer, async","tags":["script","defer","async","src"],"text":"ฝังโค้ดไว้ในหน้าได้ แต่การแยกไฟล์ด้วย `src` ดีกว่า: HTML อ่านง่าย มีโค้ดชุดเดียว และเบราว์เซอร์ cache ไว้ใช้กับหน้าอื่น.\n\n- `defer`: รอ HTML โหลดเสร็จจึงรัน และรันตามลำดับที่เขียน (ใช้เป็นค่าเริ่มต้น)\n- `async`: โหลดคู่ไปกับ HTML แล้วรันทันทีที่โหลดเสร็จ ลำดับอาจสลับได้\n- ถ้ามีทั้งสองอย่าง `async` ชนะ","blocks":[{"lang":"html","run":false,"code":"\u003cscript src=\"scripts/digital_clock.js\" defer>\u003c/script>\n\u003cscript src=\"deferred.js\" defer>\u003c/script>\n\u003cscript src=\"async.js\" async>\u003c/script>"},{"lang":"js","run":false,"code":"// digital_clock.js\nfunction displayTime() {\n  const clock = document.querySelector(\"#clock\");\n  clock.textContent = new Date().toLocaleTimeString();\n}\ndisplayTime();                    // แสดงทันที\nsetInterval(displayTime, 1000);   // แล้วอัปเดตทุกวินาที"}]}]},{"lec":"L4","id":"events","title":"Event และ DOM","blurb":"โค้ดฝั่งเบราว์เซอร์ส่วนใหญ่ทำงานเมื่อมี event เกิดขึ้น","items":[{"id":"event-model","title":"โมเดลของ Event","tags":["event","handler","listener"],"text":"โค้ดไม่ได้รันทันที แต่รอ event เช่น คลิก พิมพ์ โหลดเสร็จ. องค์ประกอบ: **event type** (ชนิดเหตุการณ์), **event target** (วัตถุที่เกิดเหตุการณ์), **event handler/listener** (ฟังก์ชันที่ตอบสนอง), **propagation** (การส่งต่อเหตุการณ์ไปยังวัตถุอื่น).\n\n- device-dependent: `mousedown`, `mousemove`, `keydown`, `touchstart`\n- device-independent: `click` (เมาส์ คีย์บอร์ด หรือแตะ)\n- UI event: `focus`, `change`, `submit`\n- state change: `load`, `DOMContentLoaded`\n- API-specific: `playing`, `seeking`, `volumechange` ของ video/audio","blocks":[]},{"id":"dom-select","title":"เลือก element ด้วย querySelector","tags":["DOM","querySelector","selector"],"text":"DOM คือต้นไม้ของ node ที่ตรงกับ HTML. แก้ node ก็คือแก้ element บนหน้าจริง. `querySelector` คืน element แรกที่ตรงกับ CSS selector (หรือ `null`), `querySelectorAll` คืนทุกตัว.","blocks":[{"lang":"js","run":false,"code":"const btn = document.querySelector(\"#button\");\nconst login = document.querySelector(\"div.user-panel.main input[name='login']\");\nconst quotes = document.querySelectorAll(\".quote, .comment\");  // ทั้ง .quote และ .comment"}]},{"id":"add-listener","title":"ผูก event ด้วย addEventListener","tags":["addEventListener","click","event"],"text":"ส่งชื่อ event และฟังก์ชันเข้าไป. ยกเลิกด้วย `removeEventListener` (ต้องส่งฟังก์ชันตัวเดิม). ใน HTML ใส่ `defer` เพื่อให้ element มีอยู่ก่อนโค้ดรัน.","blocks":[{"lang":"html","run":false,"code":"\u003cbutton>Click Me!\u003c/button>\n\u003cscript src=\"script.js\" defer>\u003c/script>"},{"lang":"js","run":false,"code":"// script.js\nfunction onClick() {\n  console.log(\"clicked\");\n}\nconst button = document.querySelector(\"button\");\nbutton.addEventListener(\"click\", onClick);\n// button.removeEventListener(\"click\", onClick);"}]},{"id":"dom-props","title":"แก้ property และ class ของ element","tags":["DOM","classList","src","textContent"],"text":"Attribute ของ HTML เข้าถึงผ่าน property ของ DOM object. คุม CSS class ด้วย `classList`.","blocks":[{"lang":"js","run":false,"code":"const image = document.querySelector(\"img\");\nimage.src = \"new-picture.png\";\nimage.classList.add(\"active\");\nimage.classList.remove(\"hidden\");\nimage.classList.toggle(\"active\");            // มีก็ลบ ไม่มีก็เพิ่ม\nconsole.log(image.classList.contains(\"active\"));\ndocument.querySelector(\"#box\").textContent = \"Hello\";"}]},{"id":"bubbling","title":"target, currentTarget และ bubbling","tags":["bubbling","target","currentTarget","propagation"],"text":"คลิกลูก ก็ทำให้ listener ของแม่ทำงานด้วย. ถ้าผูกทั้งแม่และลูก จะทำงานทั้งคู่ โดย **ลูก (ชั้นในสุด) ก่อน** แล้วลอยขึ้นไปหาแม่ เรียกว่า bubbling.\n\n- `event.target`: element ที่ถูกคลิกจริง (อาจเป็นลูก)\n- `event.currentTarget`: element ที่ผูก listener ไว้","blocks":[{"lang":"js","run":false,"code":"outer.addEventListener(\"click\", e => {\n  console.log(\"target:\", e.target.id);\n  console.log(\"currentTarget:\", e.currentTarget.id);\n});\ninner.addEventListener(\"click\", () => console.log(\"inner\"));  // ทำงานก่อน"}]}]},{"lec":"L4","id":"objects","title":"Object","blurb":"กลุ่มของ property แบบ key/value สร้างโดยไม่ต้องมี class, แก้ไขได้ตลอดเวลา, ไม่มี private","items":[{"id":"obj-basics","title":"สร้างและเข้าถึง property","tags":["object","property","delete","dot","bracket"],"text":"เข้าถึงด้วย `.` หรือ `[]`. ชื่อที่ไม่ใช่ identifier (มีช่องว่าง) ต้องใช้ `[]`. ตั้งค่า property ที่ยังไม่มีคือการสร้างใหม่. ลบด้วย `delete`. อ่าน property ที่ไม่มีได้ `undefined` (ไม่ error).","blocks":[{"lang":"js","run":true,"code":"let book = {\n  author: \"Enrico\",\n  title: \"Learning JS\",\n  pages: 340,\n  \"chapter pages\": [90, 50, 60, 140]\n};\nconsole.log(book.title, book[\"title\"]);\nconsole.log(book[\"chapter pages\"]);     // ชื่อมีช่องว่างต้องใช้ []\nbook.title = \"Advanced JS\";\nbook.telephone = \"0110901234\";          // เพิ่มใหม่\ndelete book.telephone;                  // ลบ\nconsole.log(book.nothing);              // undefined\nconsole.log(book);"}]},{"id":"obj-computed","title":"ชื่อ property จากตัวแปร (computed)","tags":["computed","property","bracket"],"text":"`[expr]` ใช้ค่าของ expression เป็นชื่อ property ได้ทั้งตอนสร้างและตอนอ่าน. ระวังเครื่องหมายคำพูด: `book[\"title\"]` คือ property ชื่อ title แต่ `book[title]` คือ property ที่ชื่อเท่ากับค่าในตัวแปร `title`.","blocks":[{"lang":"js","run":true,"code":"const prop = \"pages\";\nconst o = { [prop]: 340, [\"address\" + 1]: \"Bangkok\" };\nconsole.log(o);                   // { pages: 340, address1: 'Bangkok' }\n\nconst book = { title: \"JS\", author: \"Enrico\" };\nconst title = \"author\";\nconsole.log(book[\"title\"]);       // JS\nconsole.log(book[title]);         // Enrico"}]},{"id":"obj-exists","title":"ตรวจว่ามี property และเข้าถึงอย่างปลอดภัย","tags":["in","undefined","property"],"text":"`\"key\" in obj` คืน `true` ถ้ามี property. ส่วนการอ่านลึกหลายชั้นต้องตรวจก่อน เพราะ `undefined.xxx` จะ error (วิธีสั้นกว่าคือ optional chaining ใน Lecture 5).","blocks":[{"lang":"js","run":true,"code":"let book = { author: \"Enrico\", pages: 340 };\nconsole.log(\"author\" in book);    // true\ndelete book.author;\nconsole.log(\"author\" in book);    // false\n\nbook = { author: \"Enrico\" };\nlet surname = undefined;\nif (book) {\n  if (book.author) {\n    surname = book.author.surname;\n  }\n}\nconsole.log(surname);             // undefined"}]},{"id":"obj-iterate","title":"วนดู property","tags":["for-in","Object.keys","Object.entries","iterate"],"text":"`for...in` วนชื่อ property. `Object.keys()` คืน array ของชื่อ, `Object.entries()` คืน array ของคู่ `[key, value]`.","blocks":[{"lang":"js","run":true,"code":"let book = { author: \"Enrico\", pages: 340, chapterPages: [90, 50, 60, 140] };\nfor (const prop in book) console.log(`${prop} = ${book[prop]}`);\nconsole.log(Object.keys(book));       // [ 'author', 'pages', 'chapterPages' ]\nconsole.log(Object.entries(book)[0]); // [ 'author', 'Enrico' ]"}]},{"id":"obj-copy","title":"คัดลอก object: alias, assign, spread","tags":["copy","alias","shallow","Object.assign","spread"],"text":"`let b2 = book` ไม่ได้ copy แต่สร้าง **alias** ชี้ object เดียวกัน. ถ้าจะ copy ใช้ `Object.assign({}, book)` หรือ `{ ...book }` แต่เป็น **shallow copy** เท่านั้น: object ซ้อนข้างในยังถูกแชร์.","blocks":[{"lang":"js","run":true,"code":"let book = { author: \"Enrico\", pages: 340 };\nlet alias = book;                        // ALIAS\nalias.pages = 1;\nconsole.log(book.pages);                 // 1\n\nconst copy1 = Object.assign({}, book);   // COPY (shallow)\nconst copy2 = { ...book };\ncopy1.pages = 999;\nconsole.log(book.pages, copy1.pages, copy2.pages);   // 1 999 1\n\n// shallow: object ซ้อนในยังแชร์\nconst study = { topic: \"JavaScript\", source: book };\nconst study2 = Object.assign({}, study);\nstudy2.source.author = \"Changed\";\nconsole.log(study.source.author);        // Changed"}]},{"id":"obj-merge","title":"รวม property และตั้งค่า default","tags":["merge","Object.assign","spread","defaults"],"text":"ใส่ object หลายตัวต่อกัน property ที่อยู่ทีหลังจะทับตัวก่อนหน้า. `Object.assign(target, ...)` แก้ target จริง (ถ้า target เป็น object เดิม) ส่วน spread สร้าง object ใหม่เสมอ.","blocks":[{"lang":"js","run":true,"code":"const defaults = { theme: \"light\", pageSize: 10 };\nconst options = { pageSize: 50 };\nconst config = { ...defaults, ...options };\nconsole.log(config);                     // { theme: 'light', pageSize: 50 }\n\nconst book = { author: \"Enrico\", pages: 340 };\nconst book2 = Object.assign({}, book, { title: \"JS\" });  // object ใหม่\nconsole.log(book2);\nconst book3 = { ...book2, title: \"Better JS\" };\nconsole.log(book3);\n\nconst { a, b, ...others } = { a: 1, b: 2, c: 3, d: 4 };\nconsole.log(a, b, others);               // 1 2 { c: 3, d: 4 }"}]},{"id":"obj-create","title":"วิธีสร้าง object ที่เทียบเท่ากัน","tags":["object","create","literal","constructor"],"text":"อีกวิธีคือ constructor function (ดูหัวข้อ Function).","blocks":[{"lang":"js","run":true,"code":"const p1 = { x: 2, y: 5 };               // object literal\nconst p2 = {};                           // object ว่าง\nconst p3 = new Object();                 // constructor\nconst p4 = Object.create({ x: 2, y: 5 }); // x, y อยู่ที่ prototype\nconsole.log(p4.x, Object.keys(p4));       // 2 []"}]}]},{"lec":"L4","id":"funcs","title":"Function","blurb":"function เป็น object: เก็บในตัวแปร ส่งเป็น argument และ return ได้","items":[{"id":"func-basics","title":"การประกาศ, parameter, default, rest","tags":["function","parameter","default","rest","arguments"],"text":"- parameter ที่ไม่ได้ส่งมามีค่า `undefined`\n- ตั้ง default ได้: `function f(a, b = 1)`\n- `...arr` (rest) ต้องเป็นตัวสุดท้าย และรวม argument ที่เหลือเป็น array\n- ส่งเข้าไปเป็น by-value (สำหรับ object คือสำเนาของ reference)","blocks":[{"lang":"js","run":true,"code":"function square(x) {\n  let y = x * x;\n  return y;\n}\nfunction greet(name = \"guest\") {\n  return `Hello ${name}`;\n}\nfunction sumAll(initVal, ...arr) {\n  let sum = initVal;\n  for (let a of arr) sum += a;\n  return sum;\n}\nconsole.log(square(4), greet(), sumAll(0, 2, 4, 5));   // 16 Hello guest 11\n\nfunction opt(p) { if (p === undefined) p = 10; return p; }\nfunction opt2(p) { p = p || 10; return p; }\nconsole.log(opt(0), opt2(0));   // 0 10  (|| ทับค่า 0 ที่ถูกต้อง)"}]},{"id":"func-expr-arrow","title":"Function expression และ Arrow function","tags":["arrow","expression","function"],"text":"`function () {}` สร้าง object ชนิด function ที่เก็บลงตัวแปรได้. Arrow function คือรูปย่อ.","blocks":[{"lang":"js","run":true,"code":"const square = function (x) { return x * x; };\nconst cube = x => square(x) * x;                   // 1 param ไม่ต้องใส่ ()\nconst fourth = x => { return square(x) * square(x); };\nconst none = () => \"no params\";\nconst two = (a, b = 1) => a + b;                   // default value\nconsole.log(cube(4), fourth(2), none(), two(5));   // 64 16 no params 6"}]},{"id":"func-nested","title":"Nested function","tags":["nested","function","scope"],"text":"ประกาศฟังก์ชันซ้อนในฟังก์ชันได้. ฟังก์ชันใน เรียกจากข้างนอกไม่ได้ แต่เข้าถึงตัวแปรของฟังก์ชันนอกได้.","blocks":[{"lang":"js","run":true,"code":"function hypotenuse(a, b) {\n  const square = x => x * x;\n  return Math.sqrt(square(a) + square(b));\n}\nconsole.log(hypotenuse(3, 4));   // 5"}]},{"id":"closure","title":"Closure","tags":["closure","scope","counter","private"],"text":"ฟังก์ชันทุกตัวจำ scope ที่มันถูกสร้างไว้ แม้ฟังก์ชันภายนอกจบไปแล้ว. ใช้สร้างตัวแปร \"ส่วนตัว\" และ object ที่มี state ซ่อนอยู่ (JS ไม่มี private จริง ใน object แบบนี้).","blocks":[{"lang":"js","run":true,"code":"function greeter(name) {\n  const myname = name;\n  return function () { return \"Hello \" + myname; };\n}\nconst helloTom = greeter(\"Tom\");\nconst helloJerry = greeter(\"Jerry\");\nconsole.log(helloTom(), helloJerry());   // Hello Tom Hello Jerry\n\nfunction counter() {\n  let n = 0;\n  return {\n    count() { return n++; },\n    reset() { n = 0; }\n  };\n}\nconst c = counter(), d = counter();\nconsole.log(c.count(), c.count(), d.count());   // 0 1 0\nc.reset();\nconsole.log(c.count(), d.count());              // 0 1"}]},{"id":"constructor-fn","title":"Constructor function","tags":["constructor","new","this"],"text":"ตั้งชื่อขึ้นต้นตัวพิมพ์ใหญ่ กำหนด property ด้วย `this` และสร้าง instance ด้วย `new`.","blocks":[{"lang":"js","run":true,"code":"function Car(make, model, year) {\n  this.make = make;\n  this.model = model;\n  this.year = year;\n  this.isNew = () => year > 2000;\n}\nconst mycar = new Car(\"Eagle\", \"Talon TSi\", 1993);\nconsole.log(mycar.make, mycar.isNew());   // Eagle false"}]}]},{"lec":"L5","id":"refs","title":"Primitive และ Reference","blurb":"primitive ถูกคัดลอกตามค่า ส่วน object/array/function ถูกส่งต่อด้วย reference","items":[{"id":"ref-copy","title":"คัดลอกค่า vs คัดลอก reference","tags":["primitive","reference","copy","assign"],"text":"Primitive (string, number, boolean, null, undefined, bigint, symbol) เก็บค่าไว้ในตัวแปรเลย การ assign ให้ตัวแปรอื่นจึงได้สำเนาที่แยกกัน. Object, array, function เก็บเป็น reference การ assign คือคัดลอก reference ทำให้ตัวแปรหลายตัวชี้ object เดียวกัน.","blocks":[{"lang":"js","run":true,"code":"let a = 10;\nlet b = a;\nb = 20;\nconsole.log(a, b);            // 10 20\n\nconst user1 = { name: \"Alice\" };\nconst user2 = user1;          // คัดลอก reference\nuser2.name = \"Bob\";\nconsole.log(user1.name);      // Bob"}]},{"id":"ref-compare","title":"เปรียบเทียบค่า vs เปรียบเทียบ reference","tags":["compare","===","reference"],"text":"Primitive เทียบที่ค่า. Object และ array เทียบที่ reference: เนื้อหาเหมือนกันก็ไม่เท่า. `===` ไม่ได้เทียบ property แบบลึก.","blocks":[{"lang":"js","run":true,"code":"console.log(5 === 5);                                  // true\nconsole.log({ name: \"Alice\" } === { name: \"Alice\" });  // false\nconst a = { name: \"Alice\" };\nconst b = a;\nconsole.log(a === b);                                  // true"}]}]},{"lec":"L5","id":"arrays","title":"Array และเมธอดที่ใช้บ่อย","blurb":"แปลงข้อมูลด้วย map/filter/find แทนการวนลูปเอง","items":[{"id":"array-methods","title":"map, filter, find, reduce","tags":["map","filter","find","reduce","array"],"text":"Array of objects คือรูปแบบข้อมูลที่พบบ่อยที่สุด (เช่น ผลลัพธ์จาก API).\n\n- `map()` สร้าง array ใหม่โดยแปลงทุกตัว\n- `filter()` สร้าง array ใหม่เฉพาะตัวที่ผ่านเงื่อนไข\n- `find()` คืนตัวแรกที่ตรงเงื่อนไข (ไม่เจอได้ `undefined`)\n- `reduce()` รวมทั้ง array เป็นค่าเดียว","blocks":[{"lang":"js","run":true,"code":"const products = [\n  { id: 1, name: \"Keyboard\", price: 1200 },\n  { id: 2, name: \"Mouse\", price: 600 }\n];\nconst prices = [100, 200, 300];\nconsole.log(prices.map(price => price * 0.9));          // [ 90, 180, 270 ]\nconsole.log(products.map(p => p.name));                 // [ 'Keyboard', 'Mouse' ]\n\nconst users = [\n  { name: \"Alice\", active: true },\n  { name: \"Bob\", active: false }\n];\nconsole.log(users.filter(user => user.active));         // [ { name: 'Alice', active: true } ]\nconsole.log(products.find(p => p.id === 2));            // { id: 2, name: 'Mouse', price: 600 }\nconsole.log(prices.reduce((total, n) => total + n, 0)); // 600"}]},{"id":"array-mutation","title":"เมธอดที่แก้ต้นฉบับ vs ไม่แก้","tags":["mutate","sort","push","reverse","slice"],"text":"- แก้ array เดิม: `push`, `sort`, `reverse`\n- คืน array ใหม่ ต้นฉบับไม่เปลี่ยน: `map`, `filter`, `slice`\n\nถ้าจะ sort โดยไม่แตะต้นฉบับ ให้ copy ก่อนด้วย `slice()` หรือ `[...arr]`. การแก้ array เดิมโดยไม่ตั้งใจทำให้ debug state ของ UI ยาก.","blocks":[{"lang":"js","run":true,"code":"const items = [\"C\", \"A\", \"B\"];\nconst sorted = [...items].sort();     // copy ก่อน แล้วค่อย sort\nconsole.log(items, sorted);           // [ 'C', 'A', 'B' ] [ 'A', 'B', 'C' ]\n\nitems.push(\"D\");                      // mutate\nconsole.log(items);\n\nconst mapped = items.map(x => x.toLowerCase());\nconst filtered = items.filter(x => x !== \"A\");\nconst copied = items.slice();\nconsole.log(mapped, filtered, copied);"}]}]},{"lec":"L5","id":"destruct","title":"Destructuring","blurb":"ดึงค่าจาก object/array ออกมาเป็นตัวแปร อ่านง่ายและลดการเขียน obj.prop ซ้ำ","items":[{"id":"destruct-object","title":"Object destructuring","tags":["destructuring","object","rename","default"],"text":"ใช้ **ชื่อ property** เป็นตัวเลือก (ลำดับไม่สำคัญ). เปลี่ยนชื่อตัวแปรด้วย `key: newName`. กำหนดค่า default ด้วย `= value` เมื่อ property ไม่มี (`undefined`).","blocks":[{"lang":"js","run":true,"code":"const user = { name: \"Alice\", age: 21 };\nconst { name, age, role = \"student\" } = user;\nconst { name: displayName } = user;\nconsole.log(name, age, role, displayName);   // Alice 21 student Alice"}]},{"id":"destruct-array","title":"Array destructuring","tags":["destructuring","array","skip","useState"],"text":"ใช้ **ตำแหน่ง** (index). ข้ามตัวที่ไม่ต้องการได้ด้วยเครื่องหมายจุลภาคเว้นว่าง. เหมาะกับฟังก์ชันที่คืนหลายค่า เช่น `useState`.","blocks":[{"lang":"js","run":true,"code":"const colors = [\"red\", \"green\", \"blue\"];\nconst [first, second] = colors;\nconst [, secondColor] = colors;\nconst [head, ...rest] = colors;\nconsole.log(first, second, secondColor, head, rest);\n// const [state, setState] = useState(0);   // รูปแบบใน React"}]},{"id":"destruct-params","title":"Destructuring ใน parameter","tags":["destructuring","parameter","default"],"text":"ทำให้เห็นชัดว่าฟังก์ชันต้องการ property อะไร. ใส่ `= {}` เป็นค่า default ของทั้ง parameter เพื่อกันกรณีไม่ส่ง argument มา. อย่าใช้เกินจำเป็นเพราะอ่านยากขึ้น.","blocks":[{"lang":"js","run":true,"code":"function displayUser({ name, age, role = \"student\" }) {\n  console.log(`${name} (${age}) - ${role}`);\n}\ndisplayUser({ name: \"Alice\", age: 21 });\n\nfunction showName({ name } = {}) {\n  return name;\n}\nconsole.log(showName());    // undefined (ไม่ error)"}]}]},{"lec":"L5","id":"spread","title":"Spread, Rest และ Immutable update","blurb":"... ตัวเดียวกัน หน้าที่ต่างกันตามตำแหน่งที่เขียน","items":[{"id":"spread-array","title":"Spread กับ array","tags":["spread","array","copy","concat"],"text":"`...` ใน literal คือ **spread** แตกค่าออกมา. ใช้ copy array (shallow), รวมหลาย array และเพิ่มสมาชิกโดยไม่แก้ต้นฉบับ รูปแบบนี้พบมากใน state update.","blocks":[{"lang":"js","run":true,"code":"const items = [\"A\", \"B\"];\nconst newItems = [...items, \"C\"];\nconst frontend = [\"HTML\", \"CSS\"];\nconst backend = [\"Node\", \"Express\"];\nconst skills = [...frontend, ...backend];\nconsole.log(items, newItems, skills);"}]},{"id":"spread-object","title":"Spread กับ object","tags":["spread","object","override","immutable"],"text":"สร้าง object ใหม่ที่มี property เดิมครบ. **ตัวที่อยู่หลังทับตัวก่อนหน้า** จึงใช้อัปเดตบาง field ได้ โดยไม่แก้ต้นฉบับ.","blocks":[{"lang":"js","run":true,"code":"const user = { name: \"Alice\", age: 20 };\nconst updatedUser = { ...user, age: 21 };    // age เป็น 21\nconst notUpdated = { age: 21, ...user };     // user.age มาทีหลังจึงทับ -> 20\nconsole.log(updatedUser, notUpdated);"}]},{"id":"spread-shallow","title":"Spread เป็นแค่ shallow copy","tags":["shallow","deep","nested","structuredClone"],"text":"Spread สร้าง object/array ชั้นนอกใหม่ แต่ object ซ้อนข้างในยังแชร์กัน การแก้ข้อมูลซ้อนจึงกระทบต้นฉบับ. อย่าสับสนกับ deep clone. (เพิ่มเติมนอกสไลด์: `structuredClone(obj)` ทำ deep copy ได้.)","blocks":[{"lang":"js","run":true,"code":"const user = { name: \"Alice\", address: { city: \"Bangkok\" } };\nconst copy = { ...user };\ncopy.address.city = \"Chiang Mai\";\nconsole.log(user.address.city);   // Chiang Mai (ต้นฉบับโดนด้วย)\n\nconst deep = structuredClone(user);\ndeep.address.city = \"Phuket\";\nconsole.log(user.address.city);   // Chiang Mai (ไม่เปลี่ยน)"}]},{"id":"rest-operator","title":"Rest operator","tags":["rest","parameter","omit"],"text":"`...` ในตำแหน่งรับค่า (parameter หรือ destructuring) คือ **rest** รวมที่เหลือเป็น array หรือ object. ใช้กับฟังก์ชันที่รับ argument ไม่จำกัด และใช้ตัด field ออกจาก object (เช่น password).","blocks":[{"lang":"js","run":true,"code":"function sum(...numbers) {\n  return numbers.reduce((total, n) => total + n, 0);\n}\nconsole.log(sum(1, 2, 3, 4));   // 10\n\nconst user = { id: 1, name: \"Alice\", password: \"secret\" };\nconst { password, ...safeUser } = user;\nconsole.log(safeUser);          // { id: 1, name: 'Alice' }"}]},{"id":"immutable-update","title":"อัปเดต object ซ้อนแบบ immutable","tags":["immutable","nested","spread","update"],"text":"ต้อง spread ทุกชั้นที่เปลี่ยน. ถ้าลืม spread ชั้นใน field อื่นของชั้นนั้นจะหาย.","blocks":[{"lang":"js","run":true,"code":"const user = { id: 101, name: \"Alice\", profile: { city: \"Bangkok\", age: 21 } };\nconst updatedUser = {\n  ...user,\n  profile: { ...user.profile, city: \"Chiang Mai\" }\n};\nconst wrong = { ...user, profile: { city: \"Chiang Mai\" } };   // age หาย!\nconsole.log(user.profile.city);   // Bangkok (ต้นฉบับไม่เปลี่ยน)\nconsole.log(updatedUser.profile); // { city: 'Chiang Mai', age: 21 }\nconsole.log(wrong.profile);       // { city: 'Chiang Mai' }"}]}]},{"lec":"L5","id":"safe","title":"อ่านข้อมูลอย่างปลอดภัย: ?. และ ??","blurb":"จัดการค่าที่อาจไม่มี และตั้ง default ให้ถูกความหมาย","items":[{"id":"optional-chaining","title":"Optional chaining ?.","tags":["optional","chaining","null","undefined"],"text":"`?.` หยุดและคืน `undefined` เมื่อค่าก่อนหน้าเป็น `null`/`undefined` แทนที่จะ error. ใช้ได้กับ property, index และการเรียกฟังก์ชัน.\n\n**ไม่ใช่การจัดการ error**: มันกันแค่ null/undefined ไม่ได้ตรวจว่าข้อมูลถูกต้อง. ใช้ทุกที่จะซ่อนปัญหาข้อมูลได้ ฟิลด์ที่จำเป็นต้องตรวจและ throw เอง.","blocks":[{"lang":"js","run":true,"code":"const user = { address: { city: \"Bangkok\" } };\nconsole.log(user.address?.city);              // Bangkok\nconsole.log(user.profile?.address?.country);  // undefined (ไม่ error)\nconst users = [{ name: \"A\" }];\nconsole.log(users?.[0]?.name);                // A\nconst callback = undefined;\ncallback?.();                                 // ไม่ error\n\nconst product = { name: \"Mouse\" };\nif (product.price == null) {\n  try { throw new Error(\"Product price is required\"); }\n  catch (e) { console.log(e.message); }       // ฟิลด์จำเป็นต้องตรวจเอง\n}"}]},{"id":"nullish","title":"?? เทียบกับ","tags":[],"text":"- `||` ใช้ fallback กับ **ทุกค่า falsy** (0, \"\", false, null, undefined, NaN)\n- `??` ใช้ fallback เฉพาะ **null และ undefined**\n\nเมื่อ `0`, `false`, `\"\"` เป็นค่าที่ถูกต้อง ให้ใช้ `??`.\n\n| value | value \\|\\| \"default\" | value ?? \"default\" |\n|---|---|---|\n| undefined | \"default\" | \"default\" |\n| null | \"default\" | \"default\" |\n| 0 | \"default\" | 0 |\n| false | \"default\" | false |\n| \"\" | \"default\" | \"\" |","blocks":[{"lang":"js","run":true,"code":"const count = 0, quantity = 0;\nconsole.log(count || 10);      // 10 (ผิดความหมาย: 0 คือค่าที่ถูก)\nconsole.log(quantity ?? 10);   // 0\n\nconst cases = [[\"undefined\", undefined], [\"null\", null], [\"0\", 0], [\"false\", false], ['\"\"', \"\"]];\nfor (const [label, v] of cases) console.log(label, \"| ||:\", v || \"default\", \"| ??:\", v ?? \"default\");"}]},{"id":"api-example","title":"ตัวอย่างข้อมูลจาก API จริง","tags":["api","optional","nullish","destructuring"],"text":"รวม destructuring, `?.` และ `??`. หมายเหตุ: `nickname` เป็น `\"\"` จึง **ไม่ใช่ nullish** ผลจึงยังเป็น `\"\"`. ถ้าต้องการให้ string ว่างกลับไปใช้ชื่อ ให้ใช้ `||` สำหรับ field นี้.","blocks":[{"lang":"js","run":true,"code":"const user = {\n  id: 101,\n  name: \"Alice\",\n  profile: { nickname: \"\", address: null },\n  preferences: { darkMode: false }\n};\nconst { name, profile, preferences } = user;\nconst nickname = profile?.nickname ?? name;\nconst nicknameOrName = profile?.nickname || name;\nconst city = profile?.address?.city ?? \"Unknown\";\nconst darkMode = preferences?.darkMode ?? true;\nconsole.log(JSON.stringify(nickname), nicknameOrName, city, darkMode);\n// \"\" Alice Unknown false"}]}]},{"lec":"L5","id":"scope","title":"Scope, Call stack, Hoisting และ this","blurb":"เข้าใจว่า JS หาตัวแปรและทำงานอย่างไรเบื้องหลัง","items":[{"id":"lexical-scope","title":"Lexical scope, scope chain, shadowing","tags":["scope","lexical","shadowing","chain"],"text":"ฟังก์ชันใน เข้าถึงตัวแปรของฟังก์ชันนอกได้ แต่ฟังก์ชันนอกเข้าถึงของฟังก์ชันในไม่ได้. การหาตัวแปรไล่จาก scope ปัจจุบัน → scope นอก → … → global และหยุดเมื่อเจอ. ตัวแปรชื่อเดียวกันในชั้นในจะบัง (shadow) ชั้นนอก.","blocks":[{"lang":"js","run":true,"code":"const globalValue = \"A\";\nfunction outer() {\n  const outerValue = \"B\";\n  function inner() {\n    const innerValue = \"C\";\n    console.log(globalValue, outerValue, innerValue);   // A B C\n  }\n  inner();\n}\nouter();\n\nconst price = 100;\nfunction calculate() {\n  const price = 200;        // shadow\n  console.log(price);       // 200\n}\ncalculate();\nconsole.log(price);         // 100"}]},{"id":"call-stack","title":"Execution context และ Call stack","tags":["callstack","execution","context","overflow","recursion"],"text":"ทุกครั้งที่เรียกฟังก์ชันจะเกิด execution context ใหม่ (มี parameter และตัวแปรของตัวเอง) และถูกวางบน call stack. ตัวที่เรียกล่าสุดอยู่บนสุดและถูกถอดออกเมื่อจบ (LIFO). stack มีขนาดจำกัด: เรียกซ้อนไม่รู้จบ (infinite recursion) จะเกิด stack overflow.","blocks":[{"lang":"js","run":true,"code":"function first() { console.log(\"First\"); second(); }\nfunction second() { console.log(\"Second\"); third(); }\nfunction third() { console.log(\"Third\"); }\nfirst();\n\nfunction repeat() { repeat(); }\ntry { repeat(); } catch (e) { console.log(e.name + \": \" + e.message); }"}]},{"id":"hoisting","title":"Hoisting และ Temporal Dead Zone","tags":["hoisting","TDZ","var","let","const"],"text":"JS ลงทะเบียน declaration ก่อนรันโค้ด (ไม่ได้ย้ายบรรทัดจริง).\n\n- function declaration: เรียกก่อนบรรทัดประกาศได้\n- `var`: ถูก hoist และมีค่า `undefined` จนกว่าจะถึงบรรทัดกำหนดค่า\n- `let`/`const`: ลงทะเบียนแล้วแต่ใช้ก่อนกำหนดค่าไม่ได้ (Temporal Dead Zone) → `ReferenceError`\n- function expression / arrow ที่เก็บใน `const` ใช้ก่อนบรรทัดกำหนดไม่ได้","blocks":[{"lang":"js","run":true,"code":"sayHello();                              // ใช้ได้\nfunction sayHello() { console.log(\"Hello\"); }\n\nconsole.log(score);                      // undefined\nvar score = 100;\n\ntry { console.log(lateScore); } catch (e) { console.log(e.name); }   // ReferenceError\nlet lateScore = 100;\n\ntry { greet(); } catch (e) { console.log(e.name); }                  // ReferenceError\nconst greet = () => console.log(\"Hello\");"}]},{"id":"this","title":"this และ arrow function","tags":["this","arrow","method","bind"],"text":"`this` ขึ้นกับ **วิธีเรียกฟังก์ชัน** ไม่ใช่ตำแหน่งที่เขียน. เรียกผ่าน `user.greet()` ได้ `user`. ดึงเมธอดออกมาเรียกเดี่ยว ๆ `this` หาย (ใน strict mode เป็น `undefined`; ใน sloppy mode ของเบราว์เซอร์เป็น `window`).\n\nArrow function ไม่มี `this` ของตัวเอง แต่ใช้ `this` จาก scope ที่ล้อมอยู่ (lexical this) เหมาะกับ callback แต่ไม่เหมาะเป็น method ของ object. (เพิ่มเติมนอกสไลด์: `.bind(obj)` ผูก `this` ถาวร.)","blocks":[{"lang":"js","run":true,"code":"const user = {\n  name: \"Alice\",\n  greet() { console.log(this.name); },\n  later() { setTimeout(() => console.log(\"later:\", this.name), 100); }\n};\nuser.greet();                  // Alice\n\nconst greet = user.greet;      // เรียกโดยไม่มี user.\ntry { greet(); } catch (e) { console.log(e.name, \"(this หายไป)\"); }\n\nuser.later();                  // arrow ใช้ this ของ later -> user\nconst bound = user.greet.bind(user);\nbound();                       // Alice"}]}]},{"lec":"L5","id":"asyncl","title":"Asynchronous: Event loop, Promise, async/await","blurb":"ทำงานต่อได้ระหว่างรอผล เพื่อไม่ให้หน้าเว็บค้าง","items":[{"id":"sync-block","title":"JavaScript ทำงานทีละคำสั่ง และการบล็อก main thread","tags":["synchronous","blocking","main thread"],"text":"โค้ดปกติทำงานเรียงทีละบรรทัด งานที่ใช้เวลานานแบบ synchronous จะบล็อก main thread: ปุ่มไม่ตอบสนอง การวาดหน้าจอช้า animation ค้าง. เบราว์เซอร์ให้ API เพิ่ม (`setTimeout`, DOM, `fetch`, event listener, storage, geolocation) เพื่อทำงาน async.","blocks":[{"lang":"js","run":false,"code":"console.log(\"Start\");\nconst start = Date.now();\nwhile (Date.now() - start \u003c 5000) {\n  // บล็อก 5 วินาที: หน้าเว็บค้างทั้งหมด\n}\nconsole.log(\"End\");"}]},{"id":"event-loop","title":"Event loop, task queue และ microtask","tags":["eventloop","setTimeout","microtask","promise","queue"],"text":"งาน synchronous รันบน call stack. งาน async ถูกเบราว์เซอร์จัดการแล้ว callback รอในคิว. event loop ย้าย callback มารันเมื่อ stack ว่าง.\n\n- **task queue**: `setTimeout`, `setInterval`, DOM event ส่วนใหญ่\n- **microtask queue**: callback ของ Promise, `queueMicrotask()` มีลำดับสูงกว่า และถูกรันให้หมดหลังโค้ด sync จบ\n\nลำดับ: รันโค้ด sync → stack ว่าง → รัน microtask ทั้งหมด → (เบราว์เซอร์อาจวาดหน้า) → รัน task ถัดไป → วนซ้ำ. `setTimeout(..., 0)` ไม่ใช่ทันที: ต้องรอ stack ว่างก่อน.","blocks":[{"lang":"js","run":true,"code":"console.log(\"A\");\nsetTimeout(() => console.log(\"B\"), 0);          // task\nPromise.resolve().then(() => console.log(\"C\")); // microtask\nconsole.log(\"D\");\n// ลำดับที่ออก: A D C B"}]},{"id":"callbacks","title":"Callback และ callback hell","tags":["callback","asynchronous","hell"],"text":"Callback คือฟังก์ชันที่ส่งให้ฟังก์ชันอื่นรันทีหลังเมื่องานเสร็จ. ผลลัพธ์ async `return` ออกมาตรง ๆ ไม่ได้ เพราะฟังก์ชันนอกจบก่อน callback รัน. ถ้าขั้นตอนต่อกันหลายชั้นจะซ้อนลึกและจัดการ error ยาก (callback hell).","blocks":[{"lang":"js","run":true,"code":"function getUser(callback) {\n  setTimeout(() => callback({ id: 1, name: \"Alice\" }), 300);\n}\ngetUser(user => console.log(user));        // รับผลผ่าน callback\n\nfunction badGetUser() {\n  setTimeout(() => { return { id: 1, name: \"Alice\" }; }, 300);  // return ของ callback\n}\nconsole.log(badGetUser());                 // undefined"},{"lang":"js","run":false,"code":"// callback hell\ngetUser(user => {\n  getOrders(user.id, orders => {\n    getPayment(orders[0].id, payment => {\n      console.log(payment);\n    });\n  });\n});"}]},{"id":"promise-basics","title":"Promise: สร้าง, then, catch, finally","tags":["promise","then","catch","finally","resolve","reject"],"text":"Promise คือค่าที่จะมาในอนาคต มี 3 สถานะ: **pending** (กำลังทำ), **fulfilled** (สำเร็จ), **rejected** (ล้มเหลว).\n\n- `resolve(v)` ทำให้สำเร็จ, `reject(e)` ทำให้ล้มเหลว\n- `.then()` รันเมื่อสำเร็จ และคืน Promise ใหม่\n- `.catch()` จับ reject และ error ที่เกิดใน `.then` ก่อนหน้า\n- `.finally()` รันเสมอ ใช้ซ่อน loading หรือเปิดปุ่มกลับ","blocks":[{"lang":"js","run":true,"code":"const promise = new Promise((resolve, reject) => {\n  const success = true;\n  if (success) resolve(\"Completed\");\n  else reject(\"Failed\");\n});\npromise\n  .then(value => console.log(value))\n  .catch(error => console.error(error))\n  .finally(() => console.log(\"Finished\"));"}]},{"id":"promise-chain","title":"Chain promise และข้อผิดพลาดที่พบบ่อย","tags":["promise","chain","return","then"],"text":"`.then()` คืนค่า หรือคืน Promise ก็ได้ ถ้าคืน Promise ตัว `.then()` ถัดไปจะรอ. ข้อผิดพลาดคลาสสิก: **ลืม `return`** ทำให้ขั้นต่อไปได้ `undefined`.","blocks":[{"lang":"js","run":true,"code":"const wait = (ms, v) => new Promise(r => setTimeout(() => r(v), ms));\nconst getUser = () => wait(200, { id: 1, name: \"Alice\" });\nconst getOrders = id => wait(200, [{ id: 10, userId: id }]);\nconst getPayment = orderId => wait(200, { orderId, paid: true });\n\ngetUser()\n  .then(user => getOrders(user.id))\n  .then(orders => getPayment(orders[0].id))\n  .then(payment => console.log(\"chain:\", payment))\n  .catch(error => console.error(error))\n  .finally(() => console.log(\"finished\"));\n\n// ผิด: ไม่มี return\ngetUser()\n  .then(user => { getOrders(user.id); })\n  .then(orders => console.log(\"no return:\", orders));      // undefined\n\n// ถูก\ngetUser()\n  .then(user => { return getOrders(user.id); })\n  .then(orders => console.log(\"with return:\", orders));"}]},{"id":"async-await","title":"async/await และ try/catch/finally","tags":["async","await","try","catch","finally"],"text":"เขียนโค้ด Promise ให้อ่านเหมือนลำดับปกติ แต่ **ไม่ได้ทำให้งานกลายเป็น synchronous**.\n\n- ฟังก์ชัน `async` คืน Promise เสมอ (return ค่า = fulfilled, throw = rejected)\n- `await` หยุดเฉพาะฟังก์ชัน async นั้น รอ Promise เสร็จ ส่วนงานอื่นของเบราว์เซอร์ยังทำต่อ\n- `try...catch` จับ reject ของ `await` ได้, `finally` เหมาะกับคืนสถานะ UI","blocks":[{"lang":"js","run":true,"code":"const wait = (ms, v) => new Promise(r => setTimeout(() => r(v), ms));\nconst getUser = () => wait(200, { id: 1, name: \"Alice\" });\nconst getOrders = id => wait(200, [{ id: 10, userId: id }]);\n\nasync function loadOrders() {\n  console.log(\"loading...\");\n  try {\n    const user = await getUser();\n    const orders = await getOrders(user.id);\n    console.log(orders);\n  } catch (error) {\n    console.error(error);\n  } finally {\n    console.log(\"done\");\n  }\n}\nloadOrders();\n\nasync function greet() { return \"Hello\"; }   // เหมือน Promise.resolve(\"Hello\")\ngreet().then(v => console.log(v));"}]}]},{"lec":"L5","id":"fetch","title":"fetch และการทำงานกับ API","blurb":"ดึง/ส่งข้อมูล จัดการสถานะ และกันปัญหา request ซ้อนกัน","items":[{"id":"fetch-get","title":"fetch GET และการตรวจ response.ok","tags":["fetch","get","json","response","ok"],"text":"`fetch()` คืน Promise ที่ resolve เป็น `Response`. อ่าน body แยกอีกขั้น เช่น `response.json()` (ก็เป็น Promise).\n\n**สำคัญ**: fetch reject เฉพาะปัญหาระดับเครือข่าย. ถ้าเซิร์ฟเวอร์ตอบ 404 หรือ 500 มัน **ยัง resolve** ต้องตรวจ `response.ok` (จริงเมื่อ status 2xx) หรือ `response.status` เองแล้ว throw.","blocks":[{"lang":"js","run":false,"code":"async function loadUsers() {\n  const response = await fetch(\"/api/users\");\n  if (!response.ok) {\n    throw new Error(`HTTP error: ${response.status}`);\n  }\n  return response.json();\n}\nconst users = await loadUsers();\nrenderUsers(users);"}]},{"id":"fetch-post","title":"ส่ง JSON ด้วย POST","tags":["fetch","post","json","headers","stringify"],"text":"Body ต้องตรงกับที่ API กำหนด. Object ต้องแปลงเป็น string ด้วย `JSON.stringify` และบอกชนิดด้วย header `Content-Type`.","blocks":[{"lang":"js","run":false,"code":"const response = await fetch(\"/api/users\", {\n  method: \"POST\",\n  headers: { \"Content-Type\": \"application/json\" },\n  body: JSON.stringify({ name: \"Alice\", email: \"alice@example.com\" })\n});"}]},{"id":"fetch-form","title":"ส่งข้อมูลจากฟอร์ม","tags":["fetch","form","FormData","submit","preventDefault"],"text":"ใช้ `preventDefault()` กันหน้ารีโหลด, `FormData` อ่านค่าในฟอร์ม และ `Object.fromEntries` แปลงเป็น object.","blocks":[{"lang":"js","run":false,"code":"form.addEventListener(\"submit\", async event => {\n  event.preventDefault();\n  const data = new FormData(form);\n  const values = Object.fromEntries(data.entries());\n  await fetch(\"/api/users\", {\n    method: \"POST\",\n    headers: { \"Content-Type\": \"application/json\" },\n    body: JSON.stringify(values)\n  });\n});"}]},{"id":"fetch-patch-delete","title":"PATCH และ DELETE","tags":["fetch","patch","delete","update"],"text":"`PATCH` ใช้อัปเดตบางส่วน (ส่งเฉพาะ field ที่เปลี่ยน ถ้า API รองรับ). `DELETE` บางทีไม่มี body อย่าเรียก `response.json()` ถ้า API ไม่ได้คืน JSON.","blocks":[{"lang":"js","run":false,"code":"await fetch(\"/api/users/42\", {\n  method: \"PATCH\",\n  headers: { \"Content-Type\": \"application/json\" },\n  body: JSON.stringify({ name: \"Alice Smith\" })\n});\n\nconst response = await fetch(\"/api/users/42\", { method: \"DELETE\" });\nif (!response.ok) {\n  throw new Error(\"Delete failed\");\n}"}]},{"id":"fetch-headers","title":"Header และ request ที่ต้องยืนยันตัวตน","tags":["headers","authorization","token","security"],"text":"Header บอกข้อมูลเกี่ยวกับ request เช่น content type, authentication, ภาษา. ห้ามใส่ secret ของฝั่งเซิร์ฟเวอร์ในโค้ดฝั่ง frontend. token และ cookie ต้องออกแบบความปลอดภัยให้ดี.","blocks":[{"lang":"js","run":false,"code":"const response = await fetch(\"/api/profile\", {\n  headers: {\n    \"Content-Type\": \"application/json\",\n    \"Accept\": \"application/json\",\n    \"Authorization\": `Bearer ${token}`\n  }\n});"}]},{"id":"fetch-helper","title":"ฟังก์ชันช่วย fetchJSON และแยก fetch ออกจาก render","tags":["helper","fetchJSON","separation","render"],"text":"รวมการตรวจ `response.ok` ไว้ที่เดียว. แยกงานดึงข้อมูลออกจากงานวาด UI เพื่ออ่าน ทดสอบ และใช้ซ้ำง่าย.","blocks":[{"lang":"js","run":false,"code":"async function fetchJSON(url, options = {}) {\n  const response = await fetch(url, options);\n  if (!response.ok) {\n    throw new Error(`Request failed: ${response.status}`);\n  }\n  return response.json();\n}\n\nconst users = await fetchJSON(\"/api/users\");\nrenderUsers(users);          // render แยกเป็นอีกฟังก์ชัน"}]},{"id":"data-states","title":"สถานะของการดึงข้อมูล: loading, empty, error","tags":["loading","empty","error","state","UI"],"text":"Request ไม่ใช่แค่ \"มีข้อมูลหรือไม่มี\" แต่มีสถานะ Idle, Loading, Success, Empty, Error. แสดงให้ผู้ใช้เห็นชัด: Loading บอกว่ากำลังทำ, Empty (ไม่มีรายการ ซึ่งเป็นผลสำเร็จที่ถูกต้อง) ควรมีข้อความและทางไปต่อ, Error ใช้ข้อความที่เป็นมิตรและเก็บรายละเอียดเทคนิคไว้ log.","blocks":[{"lang":"js","run":false,"code":"async function showUsers() {\n  setLoading(true);                         // \"Loading users...\"\n  try {\n    const users = await loadUsers();\n    if (users.length === 0) {\n      showEmptyState();                     // \"No users found.\"\n      return;\n    }\n    renderUsers(users);\n  } catch (error) {\n    console.error(error);                   // รายละเอียดสำหรับ dev\n    showError(\"Unable to load users. Please try again.\");\n  } finally {\n    setLoading(false);                      // ทำงานเสมอ\n  }\n}"}]},{"id":"parallel","title":"Request ต่อกัน vs พร้อมกัน: Promise.all, allSettled","tags":["Promise.all","allSettled","parallel","sequential"],"text":"- **Sequential**: ใช้เมื่อขั้นที่สองต้องใช้ผลขั้นแรก (เวลารวม = ผลรวม)\n- **Parallel** ด้วย `Promise.all`: เมื่อ request ไม่ขึ้นต่อกัน เริ่มพร้อมกัน ผลเรียงตามลำดับ input แต่ถ้าตัวใดตัวหนึ่ง reject ทั้งก้อน reject\n- `Promise.allSettled`: ได้ผลของทุกตัวไม่ว่าสำเร็จหรือไม่ แต่ละตัวเป็น `{status:\"fulfilled\", value}` หรือ `{status:\"rejected\", reason}`","blocks":[{"lang":"js","run":true,"code":"const wait = (ms, v) => new Promise(r => setTimeout(() => r(v), ms));\nconst getUsers = () => wait(300, [\"u1\", \"u2\"]);\nconst getProducts = () => wait(500, [\"p1\"]);\nconst failing = () => new Promise((_, reject) => setTimeout(() => reject(new Error(\"boom\")), 200));\n\nconst t0 = Date.now();\nconst [users, products] = await Promise.all([getUsers(), getProducts()]);\nconsole.log(users, products, \"~\" + Math.round((Date.now() - t0) / 100) * 100 + \"ms\");  // ~500ms (ไม่ใช่ 800)\n\nconst results = await Promise.allSettled([getUsers(), failing()]);\nconsole.log(results);\n\ntry {\n  await Promise.all([getUsers(), failing()]);\n} catch (e) {\n  console.log(\"Promise.all rejected:\", e.message);\n}"}]},{"id":"race-abort","title":"Race condition และ AbortController","tags":["race","AbortController","abort","search","stale"],"text":"ค้นหาสด: พิมพ์ \"c\" แล้ว \"ca\" ถ้า request ของ \"c\" ตอบกลับทีหลัง ผลเก่าจะทับผลใหม่. แก้ด้วยการยกเลิก request เก่าด้วย `AbortController` ก่อนส่งอันใหม่ (request ที่ถูก abort จะ reject ด้วย `AbortError` ซึ่งควรเพิกเฉย).","blocks":[{"lang":"js","run":false,"code":"let controller;\nsearch.addEventListener(\"input\", async event => {\n  controller?.abort();                    // ยกเลิกอันเก่า\n  controller = new AbortController();\n  const query = event.target.value;\n  try {\n    const response = await fetch(`/api/search?q=${encodeURIComponent(query)}`, {\n      signal: controller.signal\n    });\n    const results = await response.json();\n    render(results);\n  } catch (error) {\n    if (error.name !== \"AbortError\") throw error;   // abort เป็นเรื่องปกติ\n  }\n});"}]},{"id":"debounce","title":"Debounce","tags":["debounce","input","timer","throttle"],"text":"ถ้าไม่ debounce ทุกตัวอักษรที่พิมพ์จะส่ง request. Debounce รอให้หยุดพิมพ์ชั่วครู่แล้วส่งครั้งเดียว. ใช้ closure เก็บ timer ไว้.","blocks":[{"lang":"js","run":true,"code":"function debounce(fn, delay) {\n  let timer;\n  return (...args) => {\n    clearTimeout(timer);\n    timer = setTimeout(() => fn(...args), delay);\n  };\n}\nconst handleSearch = debounce(q => console.log(\"ค้นหา:\", q), 300);\n\n// จำลองการพิมพ์ทุก 100ms\n[\"j\", \"ja\", \"jav\", \"java\"].forEach((q, i) => {\n  setTimeout(() => handleSearch(q), i * 100);\n});\n// เห็นแค่ \"ค้นหา: java\" ครั้งเดียว"}]},{"id":"url-params","title":"สร้าง query string ด้วย URLSearchParams","tags":["URLSearchParams","query","encode"],"text":"ต่อ string เอง (`\"/api/search?q=\" + query`) พลาดง่ายเมื่อมีช่องว่างหรืออักขระพิเศษ. `URLSearchParams` encode ให้ถูกต้องและอ่านง่ายกว่า.","blocks":[{"lang":"js","run":true,"code":"const query = \"coffee & tea\";\nconst params = new URLSearchParams({ q: query, page: 1 });\nconst url = `/api/search?${params}`;\nconsole.log(url);            // /api/search?q=coffee+%26+tea&page=1"}]},{"id":"api-safety","title":"อย่าเชื่อว่าข้อมูล API สมบูรณ์เสมอ","tags":["api","validation","optional","defensive"],"text":"ข้อมูลอาจขาด (user หาย, profile เป็น null), รูปแบบเปลี่ยน หรือ malformed. เข้าถึงแบบลึกตรง ๆ จะ error ใช้ `?.` ร่วมกับ default และตรวจ field ที่จำเป็นอย่างชัดเจน.","blocks":[{"lang":"js","run":true,"code":"const data = { user: { profile: null } };\n// console.log(data.user.profile.name);   // TypeError\nconsole.log(data.user?.profile?.name ?? \"ไม่ระบุชื่อ\");   // ไม่ระบุชื่อ"}]},{"id":"async-mistakes","title":"ข้อผิดพลาดที่พบบ่อยด้าน async, fetch และ JS ทั่วไป","tags":["mistakes","pitfalls","checklist"],"text":"เช็กลิสต์จาก Lecture 5:\n\n- ลืม `await` ที่ Promise\n- คาดว่าฟังก์ชัน async คืนค่าทันที\n- คิดว่า `fetch()` reject ทุกครั้งที่ HTTP error (ต้องตรวจ `response.ok`)\n- เรียก `response.json()` ทั้งที่ response ไม่มี body\n- ส่ง request ที่ไม่ขึ้นต่อกันแบบต่อคิว (ควรใช้ `Promise.all`)\n- ไม่จัดการสถานะ loading และ error\n- ปล่อยให้ response เก่าทับข้อมูลใหม่ (race condition)\n- เขียน API logic และ DOM rendering ปนในฟังก์ชันใหญ่ตัวเดียว\n- ใส่ secret ไว้ในโค้ด frontend\n- คิดว่า `const` ทำให้ object immutable (แก้ property ได้ แต่ reassign ไม่ได้)\n- คิดว่า assignment สร้างสำเนา array/object, ลืมว่า spread เป็น shallow\n- ใช้ `||` ทั้งที่ `0`, `false`, `\"\"` เป็นค่าที่ถูกต้อง\n- ใช้ `?.` ปิดปัญหาข้อมูลที่จำเป็น\n- ใช้ `sort()`/`push()` แก้ array โดยไม่ตั้งใจ","blocks":[{"lang":"js","run":true,"code":"const user = { name: \"Alice\" };\nuser.name = \"Bob\";            // ถูกต้อง: แก้ property ของ const object ได้\ntry {\n  user = { name: \"Carol\" };   // reassign ไม่ได้\n} catch (e) {\n  console.log(e.name);        // TypeError\n}"}]}]},{"lec":"HW","id":"hw","title":"แบบฝึกหัดท้าย Lecture 4 พร้อมแนวทางแก้","blurb":"ดูว่าโจทย์แต่ละข้อใช้เครื่องมือตัวไหน","items":[{"id":"hw-format","title":"formatUserData: template literal, trim, ternary","tags":["homework","template","ternary","trim","toUpperCase"],"text":"โจทย์: ฟังก์ชันคืนข้อความ `User: [NAME] | Contact: [email] | Status: [Pass/Fail]` โดยชื่อเป็นตัวพิมพ์ใหญ่, email ตัดช่องว่างหัวท้าย, ผ่านเมื่อ `score >= 50`.\n\nเครื่องมือที่ใช้: `toUpperCase()`, `trim()`, ternary `? :`, template literal.","blocks":[{"lang":"js","run":true,"code":"function formatUserData(name, email, score) {\n  const status = score >= 50 ? \"Pass\" : \"Fail\";\n  return `User: ${name.toUpperCase()} | Contact: ${email.trim()} | Status: ${status}`;\n}\nconsole.log(formatUserData(\"alice\", \"  alice@example.com  \", 72));\nconsole.log(formatUserData(\"bob\", \"bob@example.com\", 49));"}]},{"id":"hw-object-ops","title":"แก้ object: เพิ่ม, ลบ, spread","tags":["homework","object","delete","spread"],"text":"โจทย์: เพิ่ม `semester`, ลบ `studentsCount`, สร้าง `updatedCourse` ด้วย spread พร้อมเปลี่ยน `title`.\n\nเครื่องมือที่ใช้: การ assign property ใหม่, `delete`, spread แล้วตามด้วย property ที่ต้องการทับ.","blocks":[{"lang":"js","run":true,"code":"const course = {\n  courseCode: \"CSS233\",\n  title: \"Web Programming I\",\n  studentsCount: 45\n};\ncourse.semester = \"1/2026\";\ndelete course.studentsCount;\nconst updatedCourse = { ...course, title: \"Advanced Web Programming I\" };\nconsole.log(course);\nconsole.log(updatedCourse);"}]},{"id":"hw-bank","title":"createBankAccount: closure","tags":["homework","closure","private","bank"],"text":"โจทย์: คืน object ที่มี `getBalance`, `deposit`, `withdraw` และถอนเกินยอดต้องไม่สำเร็จ.\n\nเครื่องมือที่ใช้: closure เก็บ `balance` เป็นตัวแปรซ่อน (ภายนอกอ่าน `acc.balance` ไม่ได้) และ guard ด้วย `if`. ถ้าอยากรัดกุมขึ้นให้ตรวจ `amount > 0` ด้วย.","blocks":[{"lang":"js","run":true,"code":"function createBankAccount(initialBalance) {\n  let balance = initialBalance;\n  return {\n    getBalance() { return balance; },\n    deposit(amount) { balance += amount; },\n    withdraw(amount) {\n      if (amount > balance) {\n        console.log(\"ยอดเงินไม่พอ\");\n        return;\n      }\n      balance -= amount;\n    }\n  };\n}\nconst acc = createBankAccount(1000);\nacc.deposit(500);\nacc.withdraw(300);\nacc.withdraw(5000);               // ยอดเงินไม่พอ\nconsole.log(acc.getBalance());    // 1200\nconsole.log(acc.balance);         // undefined"}]},{"id":"hw-items","title":"createItemManager: closure + array","tags":["homework","closure","array","includes","filter"],"text":"โจทย์: จัดการรายการ string โดย `addItem` ห้ามซ้ำ, `removeItem`, `listItems`.\n\nเครื่องมือที่ใช้: closure เก็บ array, `includes()` กันซ้ำ, `filter()` ลบ, spread คืนสำเนา (กันไม่ให้ภายนอกแก้ array จริง).","blocks":[{"lang":"js","run":true,"code":"function createItemManager() {\n  let items = [];\n  return {\n    addItem(item) {\n      if (!items.includes(item)) items.push(item);\n    },\n    removeItem(item) {\n      items = items.filter(i => i !== item);\n    },\n    listItems() {\n      return [...items];\n    }\n  };\n}\nconst m = createItemManager();\nm.addItem(\"A\"); m.addItem(\"B\"); m.addItem(\"A\");\nconsole.log(m.listItems());   // [ 'A', 'B' ]\nm.removeItem(\"A\");\nconsole.log(m.listItems());   // [ 'B' ]"}]},{"id":"hw-counter","title":"Interactive Counter & Color Box: DOM + event","tags":["homework","DOM","event","classList","textContent"],"text":"โจทย์: ปุ่มเพิ่มค่า, สลับ class `active`, รีเซ็ต.\n\nเครื่องมือที่ใช้: `querySelector`, `addEventListener`, `textContent`, `classList.toggle/remove`, ตัวแปร `count` สำหรับเก็บสถานะ, และ `defer` ในแท็ก script.","blocks":[{"lang":"html","run":false,"code":"\u003cdiv id=\"counter-box\">0\u003c/div>\n\u003cbutton id=\"btn-increase\">Increase\u003c/button>\n\u003cbutton id=\"btn-toggle\">Toggle\u003c/button>\n\u003cbutton id=\"btn-reset\">Reset\u003c/button>\n\u003cscript src=\"script.js\" defer>\u003c/script>"},{"lang":"js","run":false,"code":"const box = document.querySelector(\"#counter-box\");\nconst btnIncrease = document.querySelector(\"#btn-increase\");\nconst btnToggle = document.querySelector(\"#btn-toggle\");\nconst btnReset = document.querySelector(\"#btn-reset\");\n\nlet count = 0;\n\nbtnIncrease.addEventListener(\"click\", () => {\n  count++;\n  box.textContent = count;\n});\n\nbtnToggle.addEventListener(\"click\", () => {\n  box.classList.toggle(\"active\");\n});\n\nbtnReset.addEventListener(\"click\", () => {\n  count = 0;\n  box.textContent = count;\n  box.classList.remove(\"active\");\n});"}]}]}],"problems":[{"q":"อยากรู้ว่าค่านี้เป็นชนิดอะไร","slug":"typeof","ans":"ใช้ `typeof` (ได้ string) ระวังว่า `typeof null` และ array ได้ \"object\"","blocks":[{"lang":"js","code":"typeof \"hi\";   // \"string\"\ntypeof null;   // \"object\""}]},{"q":"เทียบแล้วได้ผลแปลก เช่น \"\" == 0 เป็น true","slug":"equality","ans":"ใช้ `===` และ `!==` เสมอ ไม่ใช้ `==` `!=` เพราะมีการแปลงชนิดแอบแฝง","blocks":[{"lang":"js","code":"0 === \"0\";   // false"}]},{"q":"ผลคำนวณเป็น NaN และเทียบ NaN == NaN ไม่ได้","slug":"number-special","ans":"NaN ไม่เท่ากับตัวเอง ใช้ `Number.isNaN(x)` ตรวจ และดูว่าแปลงข้อความเป็นเลขไม่ได้หรือเปล่า","blocks":[{"lang":"js","code":"Number.isNaN(1 - \"x\");   // true"}]},{"q":"0.1 + 0.2 ไม่ได้ 0.3","slug":"float-precision","ans":"ทศนิยมเป็นค่าประมาณ เทียบด้วย `Number.EPSILON` หรือคิดเป็นจำนวนเต็มก่อนแล้วค่อยหาร (เช่น เงินเป็นสตางค์)","blocks":[{"lang":"js","code":"Math.abs(0.1 + 0.2 - 0.3) \u003c Number.EPSILON;   // true"}]},{"q":"ตัวเลขใหญ่เกินช่วงปลอดภัยแล้วค่าเพี้ยน","slug":"bigint","ans":"ใช้ BigInt (ลงท้าย `n`) และอย่าผสมกับ Number ในการคำนวณ","blocks":[{"lang":"js","code":"BigInt(Number.MAX_SAFE_INTEGER) + 2n;"}]},{"q":"ต้องการแทรกตัวแปรลงในข้อความหรือเขียนหลายบรรทัด","slug":"template-literals","ans":"ใช้ template literal (backtick) กับ `${expression}`","blocks":[{"lang":"js","code":"`Hello ${name}, 1+2=${1 + 2}`;"}]},{"q":"ต้องการตัดช่องว่าง เปลี่ยนตัวพิมพ์ ตัดส่วนของข้อความ","slug":"string-methods","ans":"`trim()`, `toUpperCase()`, `slice()`, `split()` และ string เดิมไม่ถูกแก้ (ได้ค่าใหม่)","blocks":[{"lang":"js","code":"\"  alice \".trim().toUpperCase();   // \"ALICE\"\n\"Hello, world\".slice(-3);          // \"rld\""}]},{"q":"เช็กว่าข้อความมีคำที่ต้องการหรือไม่","slug":"string-methods","ans":"ใช้ `includes`, `startsWith`, `endsWith` (หรือ `indexOf` ถ้าต้องการตำแหน่ง)","blocks":[{"lang":"js","code":"\"Hello, world\".includes(\"or\");   // true"}]},{"q":"เลือกค่าตามเงื่อนไขสั้น ๆ ในบรรทัดเดียว","slug":"ternary","ans":"ใช้ ternary `condition ? ถ้าจริง : ถ้าเท็จ`","blocks":[{"lang":"js","code":"const status = score >= 50 ? \"Pass\" : \"Fail\";"}]},{"q":"ตัวแปรไม่ควรถูกกำหนดค่าใหม่","slug":"declare","ans":"ใช้ `const` เป็นค่าเริ่มต้น ใช้ `let` เฉพาะที่ต้อง reassign และไม่ใช้ `var` (const กับ array/object ยัง push หรือแก้ property ได้)","blocks":[{"lang":"js","code":"const list = [1, 2];\nlist.push(3);   // OK"}]},{"q":"ตัวแปรใน for/if โผล่ใช้ได้นอก block","slug":"scope-let-var","ans":"`var` มี scope ระดับฟังก์ชัน เปลี่ยนไปใช้ `let`/`const` ที่มี block scope","blocks":[{"lang":"js","code":"for (let i = 0; i \u003c 3; i++) {}\n// i อยู่นอก for ไม่ได้"}]},{"q":"JS ใน head รันก่อน element โหลดแล้วได้ null","slug":"script-tag","ans":"ใส่ `defer` ในแท็ก script ให้รันหลัง HTML โหลดเสร็จและเรียงตามลำดับ","blocks":[{"lang":"html","code":"\u003cscript src=\"script.js\" defer>\u003c/script>"}]},{"q":"ต้องการจับ element จากหน้าเว็บ","slug":"dom-select","ans":"`document.querySelector(\"css selector\")` ได้ตัวแรก (หรือ null) และ `querySelectorAll` ได้ทั้งหมด","blocks":[{"lang":"js","code":"const btn = document.querySelector(\"#button\");\nconst items = document.querySelectorAll(\".item\");"}]},{"q":"ต้องการให้เกิดอะไรขึ้นเมื่อคลิกหรือพิมพ์","slug":"add-listener","ans":"`element.addEventListener(\"click\", handler)` และถ้าจะยกเลิกใช้ `removeEventListener` กับฟังก์ชันตัวเดิม","blocks":[{"lang":"js","code":"button.addEventListener(\"click\", () => console.log(\"clicked\"));"}]},{"q":"ต้องการเปลี่ยนข้อความ รูป หรือสไตล์ของ element","slug":"dom-props","ans":"แก้ property เช่น `textContent`, `src` และสลับ class ด้วย `classList.add/remove/toggle`","blocks":[{"lang":"js","code":"box.textContent = \"Hello\";\nbox.classList.toggle(\"active\");"}]},{"q":"คลิกลูกแล้ว handler ของแม่ทำงานด้วย","slug":"bubbling","ans":"event ลอยขึ้น (bubbling) ใช้ `event.target` (ตัวที่ถูกคลิก) แยกจาก `event.currentTarget` (ตัวที่ผูก listener)","blocks":[{"lang":"js","code":"parent.addEventListener(\"click\", e => console.log(e.target, e.currentTarget));"}]},{"q":"ต้องการเพิ่ม ลบ แก้ property ของ object","slug":"obj-basics","ans":"ใช้ `obj.key = value` เพิ่ม/แก้, `delete obj.key` ลบ, ชื่อมีช่องว่างใช้ `obj[\"my key\"]`","blocks":[{"lang":"js","code":"book.title = \"Advanced JS\";\ndelete book.telephone;"}]},{"q":"ชื่อ property มาจากตัวแปร","slug":"obj-computed","ans":"ใช้วงเล็บเหลี่ยม `obj[variable]` ตอนอ่าน และ `{ [variable]: value }` ตอนสร้าง","blocks":[{"lang":"js","code":"const key = \"pages\";\nbook[key];"}]},{"q":"ตรวจว่า object มี property นี้ไหม","slug":"obj-exists","ans":"ใช้ `\"key\" in obj` (ถ้าอ่านค่า property ที่ไม่มีจะได้ undefined)","blocks":[{"lang":"js","code":"\"author\" in book;"}]},{"q":"อยากวนดูทุก key และ value ของ object","slug":"obj-iterate","ans":"ใช้ `for...in`, `Object.keys()` หรือ `Object.entries()`","blocks":[{"lang":"js","code":"for (const [k, v] of Object.entries(book)) console.log(k, v);"}]},{"q":"แก้ object ที่ copy แล้วต้นฉบับเปลี่ยนตาม","slug":"obj-copy","ans":"`let b = a` เป็นแค่ alias ให้ copy ด้วย `{ ...a }` หรือ `Object.assign({}, a)` และถ้ามีของซ้อนข้างในต้อง copy ชั้นในด้วย (shallow copy)","blocks":[{"lang":"js","code":"const copy = { ...book };"}]},{"q":"ต้องการรวม object และมีค่า default","slug":"obj-merge","ans":"วาง default ก่อน แล้วตามด้วยค่าที่ผู้ใช้กำหนด ตัวหลังทับตัวหน้า","blocks":[{"lang":"js","code":"const config = { ...defaults, ...options };"}]},{"q":"ฟังก์ชันต้องรับ argument กี่ตัวก็ได้","slug":"func-basics","ans":"ใช้ rest parameter `...arr` (ต้องเป็นตัวสุดท้าย) ได้ array ของ argument ที่เหลือ","blocks":[{"lang":"js","code":"function sumAll(init, ...nums) { return nums.reduce((t, n) => t + n, init); }"}]},{"q":"parameter ไม่ส่งมาแล้วเป็น undefined","slug":"func-basics","ans":"ตั้ง default ที่ parameter `function f(a, b = 1)` และถ้า 0/\"\"/false เป็นค่าที่ถูกต้อง อย่าใช้ `p || default`","blocks":[{"lang":"js","code":"function greet(name = \"guest\") { return `Hello ${name}`; }"}]},{"q":"ต้องการฟังก์ชันสั้น ๆ หรือส่งเป็น callback","slug":"func-expr-arrow","ans":"ใช้ arrow function `x => x * 2`","blocks":[{"lang":"js","code":"const double = x => x * 2;"}]},{"q":"ต้องการตัวแปรที่ซ่อนอยู่ข้างใน เช่น ตัวนับ ยอดเงิน รายการ","slug":"closure","ans":"คืน object ของฟังก์ชันจากฟังก์ชันที่ประกาศตัวแปรไว้ (closure) ภายนอกเข้าถึงตัวแปรไม่ได้ตรง ๆ","blocks":[{"lang":"js","code":"function counter() {\n  let n = 0;\n  return { count: () => ++n, reset: () => { n = 0; } };\n}"}]},{"q":"ต้องสร้าง object แบบเดียวกันหลายตัว","slug":"constructor-fn","ans":"constructor function ชื่อขึ้นต้นตัวพิมพ์ใหญ่ ใช้ `this` กำหนด property และสร้างด้วย `new`","blocks":[{"lang":"js","code":"const car = new Car(\"Eagle\", \"Talon TSi\", 1993);"}]},{"q":"แก้ array/object ตัวหนึ่งแล้วอีกตัวเปลี่ยนด้วย","slug":"ref-copy","ans":"object/array ส่งต่อด้วย reference ถ้าต้องการสำเนาให้ copy ชัดเจน (`[...arr]`, `{ ...obj }`)","blocks":[{"lang":"js","code":"const b = [...a];"}]},{"q":"เทียบ object สองตัวที่หน้าตาเหมือนกันแล้วได้ false","slug":"ref-compare","ans":"`===` เทียบ reference ไม่เทียบเนื้อหา ต้องเทียบ property ทีละตัวเอง","blocks":[{"lang":"js","code":"a.name === b.name;"}]},{"q":"ต้องการแปลงทุกสมาชิกใน array","slug":"array-methods","ans":"`map()` ได้ array ใหม่ที่แปลงแล้ว","blocks":[{"lang":"js","code":"prices.map(p => p * 0.9);"}]},{"q":"ต้องการกรอง array ตามเงื่อนไข หรือหาตัวแรกที่ตรง","slug":"array-methods","ans":"`filter()` ได้ทุกตัวที่ผ่าน, `find()` ได้ตัวแรก","blocks":[{"lang":"js","code":"users.filter(u => u.active);\nproducts.find(p => p.id === 2);"}]},{"q":"ต้องการรวม array เป็นค่าเดียว เช่น ผลรวม","slug":"array-methods","ans":"`reduce((total, item) => total + item, 0)`","blocks":[{"lang":"js","code":"prices.reduce((total, n) => total + n, 0);"}]},{"q":"sort() หรือ push() ทำให้ array เดิมเปลี่ยน","slug":"array-mutation","ans":"`push`, `sort`, `reverse` แก้ต้นฉบับ ให้ copy ก่อนด้วย `[...arr]` หรือ `slice()` แล้วค่อย sort","blocks":[{"lang":"js","code":"const sorted = [...items].sort();"}]},{"q":"ต้องการดึงหลาย property ออกมาเป็นตัวแปร","slug":"destruct-object","ans":"object destructuring และเปลี่ยนชื่อด้วย `key: newName`, ตั้ง default ด้วย `= value`","blocks":[{"lang":"js","code":"const { name, age, role = \"student\" } = user;"}]},{"q":"ฟังก์ชันคืนหลายค่าเป็น array หรืออยากข้ามบางตัว","slug":"destruct-array","ans":"array destructuring ตามตำแหน่ง ข้ามด้วย `,`","blocks":[{"lang":"js","code":"const [, second] = colors;"}]},{"q":"ฟังก์ชันรับ object เป็น parameter และอยากเห็นชัดว่าใช้ field ไหน","slug":"destruct-params","ans":"destructure ที่ parameter และใส่ `= {}` กันกรณีไม่ส่งอะไรมา","blocks":[{"lang":"js","code":"function show({ name, age } = {}) {}"}]},{"q":"เพิ่มสมาชิกหรือรวม array โดยไม่แก้ของเดิม","slug":"spread-array","ans":"`[...items, \"C\"]` และ `[...a, ...b]`","blocks":[{"lang":"js","code":"const next = [...items, \"C\"];"}]},{"q":"อัปเดตบาง field ของ object โดยไม่แก้ของเดิม","slug":"spread-object","ans":"`{ ...user, age: 21 }` ตัวที่อยู่หลังทับตัวหน้า","blocks":[{"lang":"js","code":"const updated = { ...user, age: 21 };"}]},{"q":"spread แล้วแก้ข้อมูลซ้อนข้างในแต่ต้นฉบับเปลี่ยนด้วย","slug":"spread-shallow","ans":"spread เป็น shallow copy ให้ spread ชั้นในที่แก้ด้วย หรือใช้ `structuredClone` ทำ deep copy","blocks":[{"lang":"js","code":"const deep = structuredClone(user);"}]},{"q":"ต้องการตัด field ออกจาก object เช่น password","slug":"rest-operator","ans":"object destructuring กับ rest","blocks":[{"lang":"js","code":"const { password, ...safeUser } = user;"}]},{"q":"อัปเดตค่าที่ซ้อนหลายชั้นโดยไม่แก้ของเดิม","slug":"immutable-update","ans":"spread ทุกชั้นที่เปลี่ยน ถ้าลืมชั้นใน field อื่นจะหาย","blocks":[{"lang":"js","code":"const next = { ...user, profile: { ...user.profile, city: \"Chiang Mai\" } };"}]},{"q":"อ่านค่าลึก ๆ แล้ว error เพราะบางชั้นเป็น null/undefined","slug":"optional-chaining","ans":"optional chaining `?.` แต่ฟิลด์ที่จำเป็นยังต้องตรวจเอง","blocks":[{"lang":"js","code":"const city = user?.profile?.address?.city;"}]},{"q":"ตั้งค่า default แต่ 0, false หรือ \"\" เป็นค่าที่ถูกต้อง","slug":"nullish","ans":"ใช้ `??` (เฉพาะ null/undefined) แทน `||`","blocks":[{"lang":"js","code":"const qty = input ?? 10;"}]},{"q":"ทำไมใช้ฟังก์ชันก่อนบรรทัดประกาศได้/ไม่ได้","slug":"hoisting","ans":"function declaration เรียกก่อนได้, `var` ได้ undefined, `let`/`const` และ arrow ที่เก็บใน const เจอ ReferenceError (Temporal Dead Zone)","blocks":[{"lang":"js","code":"sayHello();\nfunction sayHello() {}"}]},{"q":"ตัวแปรชื่อซ้ำแต่ได้ค่าไม่ตรงที่คิด","slug":"lexical-scope","ans":"JS หาตัวแปรจาก scope ปัจจุบันออกไปข้างนอก ชั้นในที่ชื่อซ้ำจะบัง (shadow) ชั้นนอก","blocks":[{"lang":"js","code":"const price = 100;\nfunction f() { const price = 200; return price; }"}]},{"q":"เกิด Maximum call stack size exceeded","slug":"call-stack","ans":"เกิดจากเรียกตัวเองไม่รู้จบ (recursion) ต้องมีเงื่อนไขหยุด","blocks":[{"lang":"js","code":"function countdown(n) { if (n === 0) return; countdown(n - 1); }"}]},{"q":"เรียกเมธอดแล้ว this กลายเป็น undefined","slug":"this","ans":"ต้องเรียกผ่าน `obj.method()` หรือใช้ arrow function ใน callback ที่ต้องการ this จาก scope นอก (หรือ `.bind(obj)`)","blocks":[{"lang":"js","code":"setTimeout(() => console.log(this.name), 1000);"}]},{"q":"setTimeout(..., 0) ทำไมรันทีหลังโค้ดบรรทัดถัดไป","slug":"event-loop","ans":"callback รอในคิวจนกว่า call stack ว่าง และ Promise (microtask) มาก่อน setTimeout (task) ลำดับ A D C B ในตัวอย่าง","blocks":[{"lang":"js","code":"setTimeout(() => console.log(\"B\"), 0);\nPromise.resolve().then(() => console.log(\"C\"));"}]},{"q":"หน้าเว็บค้างตอนคำนวณหนัก ๆ","slug":"sync-block","ans":"โค้ด sync ยาว ๆ บล็อก main thread ให้ย้ายงานรอไปใช้ API แบบ async","blocks":[{"lang":"js","code":"// หลีกเลี่ยง while (...) ที่วนนาน ๆ บน main thread"}]},{"q":"return ค่าจาก setTimeout หรือ callback แล้วได้ undefined","slug":"callbacks","ans":"ผลลัพธ์ async ต้องรับผ่าน callback หรือ Promise ไม่ใช่ return ตรง ๆ","blocks":[{"lang":"js","code":"getUser(user => console.log(user));"}]},{"q":"ต้องรอผลก่อนทำขั้นต่อไป หลีกเลี่ยง callback ซ้อนลึก","slug":"promise-chain","ans":"ใช้ Promise chain `.then()` ที่ `return` Promise ตัวถัดไป และ `.catch()` ตัวเดียวจัดการ error","blocks":[{"lang":"js","code":"getUser().then(u => getOrders(u.id)).then(console.log).catch(console.error);"}]},{"q":".then ตัวถัดไปได้ undefined","slug":"promise-chain","ans":"ลืม `return` ใน `.then()` ก่อนหน้า","blocks":[{"lang":"js","code":".then(user => { return getOrders(user.id); })"}]},{"q":"อยากเขียน async ให้อ่านเป็นลำดับ","slug":"async-await","ans":"ใช้ `async` กับ `await` และใส่ `try/catch/finally`","blocks":[{"lang":"js","code":"const user = await getUser();"}]},{"q":"ต้องการคืนสถานะ UI ไม่ว่าสำเร็จหรือล้มเหลว (ซ่อน loading)","slug":"async-await","ans":"ใช้ `finally`","blocks":[{"lang":"js","code":"try { await load(); } finally { setLoading(false); }"}]},{"q":"fetch ได้ 404/500 แต่ไม่เข้า catch","slug":"fetch-get","ans":"fetch ไม่ reject เมื่อ HTTP error ให้ตรวจ `response.ok` แล้ว throw เอง","blocks":[{"lang":"js","code":"if (!response.ok) throw new Error(`HTTP error: ${response.status}`);"}]},{"q":"ต้องการข้อมูล JSON จาก API","slug":"fetch-get","ans":"`const data = await (await fetch(url)).json()` พร้อมตรวจ `response.ok` ก่อน","blocks":[{"lang":"js","code":"const users = await response.json();"}]},{"q":"ต้องการส่งข้อมูลไป API ด้วย POST","slug":"fetch-post","ans":"ตั้ง `method`, header `Content-Type: application/json` และ `body: JSON.stringify(obj)`","blocks":[{"lang":"js","code":"await fetch(url, { method: \"POST\", headers: { \"Content-Type\": \"application/json\" }, body: JSON.stringify(data) });"}]},{"q":"ต้องการส่งค่าจากฟอร์ม","slug":"fetch-form","ans":"`event.preventDefault()` แล้ว `Object.fromEntries(new FormData(form).entries())`","blocks":[{"lang":"js","code":"const values = Object.fromEntries(new FormData(form).entries());"}]},{"q":"แก้ข้อมูลบางส่วนหรือลบข้อมูลผ่าน API","slug":"fetch-patch-delete","ans":"`PATCH` ส่งเฉพาะ field ที่เปลี่ยน, `DELETE` ไม่ต้องเรียก `response.json()` ถ้าไม่มี body","blocks":[{"lang":"js","code":"await fetch(\"/api/users/42\", { method: \"DELETE\" });"}]},{"q":"ต้องส่ง token ไปกับ request","slug":"fetch-headers","ans":"ใส่ header `Authorization` ห้ามใส่ secret ของเซิร์ฟเวอร์ในโค้ด frontend","blocks":[{"lang":"js","code":"headers: { Authorization: `Bearer ${token}` }"}]},{"q":"เขียน fetch ซ้ำหลายที่","slug":"fetch-helper","ans":"รวมเป็นฟังก์ชันช่วยเดียวที่ตรวจ `ok` และคืน JSON แยกจากส่วน render","blocks":[{"lang":"js","code":"const users = await fetchJSON(\"/api/users\");"}]},{"q":"ต้องแสดง loading, ไม่มีข้อมูล และ error","slug":"data-states","ans":"จัดการ 3 กรณี: `setLoading` ใน try/finally, ตรวจ `users.length === 0` สำหรับ empty, และ catch สำหรับ error","blocks":[{"lang":"js","code":"if (users.length === 0) showEmptyState();"}]},{"q":"หลาย request ไม่ขึ้นต่อกันแต่ช้า","slug":"parallel","ans":"ส่งพร้อมกันด้วย `Promise.all` (ถ้าตัวใดตัวหนึ่งล้มเหลวทั้งก้อนล้มเหลว)","blocks":[{"lang":"js","code":"const [users, products] = await Promise.all([getUsers(), getProducts()]);"}]},{"q":"อยากได้ผลของทุก request แม้บางตัวล้มเหลว","slug":"parallel","ans":"ใช้ `Promise.allSettled` แล้วดู `status` ของแต่ละตัว","blocks":[{"lang":"js","code":"const results = await Promise.allSettled([getUsers(), getProducts()]);"}]},{"q":"ค้นหาแบบพิมพ์สดแล้วผลเก่ามาทับผลใหม่","slug":"race-abort","ans":"ยกเลิก request เก่าด้วย `AbortController` ก่อนส่งอันใหม่ และเพิกเฉย `AbortError`","blocks":[{"lang":"js","code":"controller?.abort();\ncontroller = new AbortController();"}]},{"q":"พิมพ์ทีละตัวอักษรแล้วส่ง request ถี่เกินไป","slug":"debounce","ans":"ใช้ debounce รอให้หยุดพิมพ์ชั่วครู่แล้วส่งครั้งเดียว","blocks":[{"lang":"js","code":"const handleSearch = debounce(searchProducts, 300);"}]},{"q":"ต่อ query string เองแล้วมีปัญหากับอักขระพิเศษ","slug":"url-params","ans":"ใช้ `URLSearchParams` ที่ encode ให้ถูกต้อง","blocks":[{"lang":"js","code":"const params = new URLSearchParams({ q: query, page: 1 });"}]},{"q":"ข้อมูลจาก API อาจไม่ครบหรือเป็น null","slug":"api-safety","ans":"อ่านด้วย `?.` ร่วมกับ default (`??`) และตรวจ field ที่จำเป็นแล้ว throw","blocks":[{"lang":"js","code":"data.user?.profile?.name ?? \"ไม่ระบุ\";"}]},{"q":"ปุ่มเพิ่มตัวนับ สลับ class และรีเซ็ต","slug":"hw-counter","ans":"`querySelector` จับปุ่ม, ตัวแปร `count`, `addEventListener(\"click\")`, `textContent`, `classList.toggle/remove`","blocks":[{"lang":"js","code":"btn.addEventListener(\"click\", () => { count++; box.textContent = count; });"}]},{"q":"ฟังก์ชันที่ต้องจัดรูปข้อความด้วยเงื่อนไข","slug":"hw-format","ans":"template literal ร่วมกับ ternary และเมธอดของ string","blocks":[{"lang":"js","code":"`${name.toUpperCase()} | ${score >= 50 ? \"Pass\" : \"Fail\"}`;"}]},{"q":"ต้องสร้าง object ที่มีเมธอดและเก็บสถานะ เช่น บัญชีธนาคาร","slug":"hw-bank","ans":"closure + object ของเมธอด + เงื่อนไขป้องกัน","blocks":[{"lang":"js","code":"function createBankAccount(initial) { let balance = initial; return { getBalance: () => balance }; }"}]},{"q":"จัดการรายการไม่ให้ซ้ำ","slug":"hw-items","ans":"closure เก็บ array, `includes` กันซ้ำ, `filter` ลบ, คืน `[...items]`","blocks":[{"lang":"js","code":"if (!items.includes(item)) items.push(item);"}]},{"q":"แก้ object: เพิ่ม ลบ และสร้างสำเนาที่เปลี่ยน field เดียว","slug":"hw-object-ops","ans":"assign property ใหม่, `delete`, `{ ...obj, field: newValue }`","blocks":[{"lang":"js","code":"const updated = { ...course, title: \"New title\" };"}]}]}</script>
+<script>
+function inspect(v, depth, seen) {
+  depth = depth || 0;
+  seen = seen || [];
+  if (v === null) return 'null';
+  var t = typeof v;
+  if (t === 'string') return depth ? "'" + v.replace(/'/g, "\\'") + "'" : v;
+  if (t === 'number') return Object.is(v, -0) ? '-0' : String(v);
+  if (t === 'bigint') return v + 'n';
+  if (t === 'function') return '[Function: ' + (v.name || 'anonymous') + ']';
+  if (t === 'symbol') return v.toString();
+  if (t !== 'object') return String(v);
+  if (v instanceof Error) return v.name + ': ' + v.message;
+  if (seen.indexOf(v) !== -1) return '[Circular]';
+  if (depth > 3) return Array.isArray(v) ? '[Array]' : '[Object]';
+  var s = seen.concat([v]);
+  if (Array.isArray(v)) {
+    return v.length ? '[ ' + v.map(function (x) { return inspect(x, depth + 1, s); }).join(', ') + ' ]' : '[]';
+  }
+  var keys = Object.keys(v);
+  if (!keys.length) return '{}';
+  return '{ ' + keys.map(function (k) {
+    var name = /^[A-Za-z_$][\w$]*$/.test(k) ? k : "'" + k + "'";
+    return name + ': ' + inspect(v[k], depth + 1, s);
+  }).join(', ') + ' }';
+}
+
+function makeConsole(emit) {
+  var log = function () {
+    emit(Array.prototype.map.call(arguments, function (x) {
+      return typeof x === 'string' ? x : inspect(x);
+    }).join(' '));
+  };
+  return {
+    log: log, info: log, warn: log, debug: log,
+    error: function () { log.apply(null, ['Error:'].concat([].slice.call(arguments))); }
+  };
+}
+
+function runCode(code, emit) {
+  var AF = Object.getPrototypeOf(async function () {}).constructor;
+  var fn;
+  try {
+    fn = new AF('console', '"use strict";\n' + code);
+  } catch (e) {
+    emit((e && e.name ? e.name + ': ' + e.message : String(e)));
+    return Promise.resolve();
+  }
+  return Promise.resolve()
+    .then(function () { return fn(makeConsole(emit)); })
+    .catch(function (e) { emit('Uncaught ' + (e && e.name ? e.name + ': ' + e.message : String(e))); });
+}
+
+if (typeof module !== 'undefined') module.exports = { inspect: inspect, makeConsole: makeConsole, runCode: runCode };
+
+
+(function () {
+  var DATA = JSON.parse(document.getElementById('data').textContent);
+  var LEC = { L4: 'Lecture 4', L5: 'Lecture 5', HW: 'แบบฝึกหัด' };
+  var LEADS = {
+    tools: 'พิมพ์ค้นหาหรือเลือกหัวข้อจากสารบัญ กด "คัดลอก" เพื่อเอาโค้ดไปใช้ กด "รัน" เพื่อดูผลจริงของตัวอย่างที่ทดลองได้ (ตัวอย่างที่ต้องมีหน้า HTML หรือ API จริงจะไม่มีปุ่มรัน)',
+    problems: 'แต่ละข้อบอกว่าถ้าเจอปัญหาแบบนี้ให้ใช้เครื่องมือตัวไหน พร้อมโค้ดสั้น ๆ และลิงก์ไปคำอธิบายเต็มของหัวข้อนั้น'
+  };
+  var state = { view: 'tools', lec: 'all', q: '' };
+  var CODE = {};
+  var index = {};
+
+  function esc(s) {
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  DATA.sections.forEach(function (sec) {
+    sec.items.forEach(function (it) {
+      index[it.id] = { it: it, sec: sec };
+      it.hay = (it.title + ' ' + it.tags.join(' ') + ' ' + it.text + ' ' + it.blocks.map(function (b) { return b.code; }).join(' ')).toLowerCase();
+    });
+  });
+  DATA.problems.forEach(function (p) {
+    p.lec = index[p.slug].sec.lec;
+    p.hay = (p.q + ' ' + p.ans + ' ' + p.blocks.map(function (b) { return b.code; }).join(' ')).toLowerCase();
+  });
+
+  /* syntax highlighting */
+  var JS_RE = /(\/\/[^\n]*|\/\*[\s\S]*?\*\/)|("(?:\\.|[^"\\\n])*"|'(?:\\.|[^'\\\n])*'|`(?:\\.|[^`\\])*`)|\b(0[xXbBoO][\da-fA-F_]+n?|\d[\d_]*(?:\.\d+)?(?:[eE][+-]?\d+)?n?)\b|\b(const|let|var|function|return|if|else|for|while|of|in|new|class|async|await|try|catch|finally|throw|typeof|delete|this)\b|\b(true|false|null|undefined|NaN|Infinity)\b/g;
+  var JS_CLS = ['', 'com', 'str', 'num', 'kw', 'lit'];
+  var HTML_RE = /(<!--[\s\S]*?-->)|(<\/?[A-Za-z][\w-]*)|("[^"]*")|(\/?>)/g;
+  var HTML_CLS = ['', 'com', 'kw', 'str', 'kw'];
+
+  function hl(code, lang) {
+    var re, cls;
+    if (lang === 'html') { re = HTML_RE; cls = HTML_CLS; }
+    else if (lang === 'js') { re = JS_RE; cls = JS_CLS; }
+    else return esc(code);
+    re.lastIndex = 0;
+    var out = '', last = 0, m;
+    while ((m = re.exec(code))) {
+      var g = 0;
+      for (var i = 1; i < m.length; i++) { if (m[i] !== undefined) { g = i; break; } }
+      out += esc(code.slice(last, m.index)) + '<span class="t-' + cls[g] + '">' + esc(m[0]) + '</span>';
+      last = re.lastIndex;
+    }
+    return out + esc(code.slice(last));
+  }
+
+  /* prose: paragraphs, bullet lists, tables, `code`, **bold** */
+  function inline(s) {
+    return esc(s)
+      .replace(/`([^`]+)`/g, function (_, c) { return '<code>' + c + '</code>'; })
+      .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+  }
+  function cells(row) {
+    return row.replace(/^\|/, '').replace(/\|\s*$/, '').split(/(?<!\\)\|/).map(function (c) { return c.trim().replace(/\\\|/g, '|'); });
+  }
+  function table(rows) {
+    var head = cells(rows[0]);
+    var body = rows.slice(2).map(cells);
+    return '<div class="tablewrap"><table><thead><tr>' + head.map(function (h) { return '<th>' + inline(h) + '</th>'; }).join('') +
+      '</tr></thead><tbody>' + body.map(function (r) { return '<tr>' + r.map(function (c) { return '<td>' + inline(c) + '</td>'; }).join('') + '</tr>'; }).join('') +
+      '</tbody></table></div>';
+  }
+  function prose(text) {
+    var html = '', para = [], list = [], rows = [], mode = null;
+    function flush() {
+      if (para.length) html += '<p>' + inline(para.join(' ')) + '</p>';
+      if (list.length) html += '<ul>' + list.map(function (l) { return '<li>' + inline(l) + '</li>'; }).join('') + '</ul>';
+      if (rows.length) html += table(rows);
+      para = []; list = []; rows = [];
+    }
+    text.split('\n').forEach(function (raw) {
+      var l = raw.trimEnd();
+      if (!l.trim()) { flush(); mode = null; return; }
+      var m = l.charAt(0) === '|' ? 't' : (l.indexOf('- ') === 0 ? 'l' : 'p');
+      if (m !== mode) { flush(); mode = m; }
+      if (m === 't') rows.push(l);
+      else if (m === 'l') list.push(l.slice(2));
+      else para.push(l);
+    });
+    flush();
+    return html;
+  }
+
+  /* views */
+  function block(key, b, canRun) {
+    CODE[key] = b.code;
+    var run = canRun && b.run ? '<button class="btn run" type="button" data-run="' + key + '">รัน</button>' : '';
+    return '<figure class="code" style="margin-inline:0"><div class="bar"><span class="lang">' + esc(b.lang) + '</span><div class="acts">' + run +
+      '<button class="btn" type="button" data-copy="' + key + '">คัดลอก</button></div></div>' +
+      '<pre id="c-' + key + '"><code>' + hl(b.code, b.lang) + '</code></pre>' +
+      (run ? '<pre class="out" id="o-' + key + '" hidden aria-live="polite"></pre>' : '') + '</figure>';
+  }
+
+  function itemHtml(it) {
+    return '<article class="item" id="i-' + it.id + '"><h3>' + esc(it.title) + '</h3>' +
+      '<div class="tags">' + it.tags.map(function (t) { return '<button class="tag" type="button" data-tag="' + esc(t) + '">#' + esc(t) + '</button>'; }).join('') + '</div>' +
+      '<div class="prose">' + prose(it.text) + '</div>' +
+      it.blocks.map(function (b, i) { return block(it.id + '-' + i, b, true); }).join('') + '</article>';
+  }
+
+  function matches(hay, q) {
+    return q.split(/\s+/).every(function (t) { return hay.indexOf(t) !== -1; });
+  }
+
+  function renderTools() {
+    var q = state.q.trim().toLowerCase();
+    var html = '', shown = 0;
+    var toc = { L4: [], L5: [], HW: [] };
+    DATA.sections.forEach(function (sec) {
+      if (state.lec !== 'all' && state.lec !== sec.lec) return;
+      var its = sec.items.filter(function (it) { return !q || matches(it.hay, q); });
+      if (!its.length) return;
+      shown += its.length;
+      toc[sec.lec].push('<a href="#s-' + sec.id + '" data-go="s-' + sec.id + '">' + esc(sec.title) + ' <span>' + its.length + '</span></a>');
+      html += '<section class="sec" id="s-' + sec.id + '"><header class="sec-head"><span class="badge ' + sec.lec + '">' + LEC[sec.lec] + '</span><h2>' + esc(sec.title) +
+        '</h2><p>' + esc(sec.blurb) + '</p></header>' + its.map(itemHtml).join('') + '</section>';
+    });
+    document.getElementById('main').innerHTML = html || emptyHtml();
+    document.getElementById('toc-body').innerHTML = ['L4', 'L5', 'HW'].filter(function (k) { return toc[k].length; }).map(function (k) {
+      return '<div class="toc-group"><h4>' + LEC[k] + '</h4>' + toc[k].join('') + '</div>';
+    }).join('');
+    document.getElementById('count').textContent = 'แสดง ' + shown + ' หัวข้อ';
+  }
+
+  function renderProblems() {
+    var q = state.q.trim().toLowerCase();
+    var list = DATA.problems.filter(function (p) {
+      return (state.lec === 'all' || state.lec === p.lec) && (!q || matches(p.hay, q));
+    });
+    var html = list.map(function (p, n) {
+      var target = index[p.slug];
+      return '<article class="prob"><div><span class="badge ' + p.lec + '">' + LEC[p.lec] + '</span><h3>' + esc(p.q) + '</h3></div><div>' +
+        '<p class="ans">' + inline(p.ans) + '</p>' +
+        p.blocks.map(function (b, i) { return block('p' + n + '-' + i, b, false); }).join('') +
+        '<button class="jump" type="button" data-jump="' + p.slug + '">ดูคำอธิบายเต็ม: ' + esc(target.it.title) + ' →</button></div></article>';
+    }).join('');
+    document.getElementById('main').innerHTML = html || emptyHtml();
+    document.getElementById('count').textContent = 'แสดง ' + list.length + ' โจทย์';
+  }
+
+  function emptyHtml() {
+    return '<div class="empty">ไม่พบผลลัพธ์สำหรับ "' + esc(state.q) + '" ลองคำอื่น เช่น map, closure, fetch, this หรือเปลี่ยนตัวกรอง</div>';
+  }
+
+  function render() {
+    var tools = state.view === 'tools';
+    document.getElementById('layout').className = tools ? 'layout' : 'layout solo';
+    document.getElementById('toc').hidden = !tools;
+    document.getElementById('lead').textContent = LEADS[state.view];
+    document.querySelectorAll('.tab').forEach(function (t) { t.setAttribute('aria-selected', String(t.dataset.view === state.view)); });
+    document.querySelectorAll('.chip').forEach(function (c) { c.setAttribute('aria-pressed', String(c.dataset.lec === state.lec)); });
+    if (tools) renderTools(); else renderProblems();
+  }
+
+  /* actions */
+  function flash(btn, msg) {
+    var old = btn.dataset.label || btn.textContent;
+    btn.dataset.label = old;
+    btn.textContent = msg;
+    setTimeout(function () { btn.textContent = old; }, 1400);
+  }
+
+  function copyCode(key, btn) {
+    var text = CODE[key];
+    var fallback = function () {
+      var pre = document.getElementById('c-' + key);
+      var r = document.createRange();
+      r.selectNodeContents(pre);
+      var s = window.getSelection();
+      s.removeAllRanges();
+      s.addRange(r);
+      flash(btn, 'เลือกแล้ว กด Ctrl+C');
+    };
+    try {
+      navigator.clipboard.writeText(text).then(function () { flash(btn, 'คัดลอกแล้ว'); }, fallback);
+    } catch (e) { fallback(); }
+  }
+
+  function runBlock(key, btn) {
+    var out = document.getElementById('o-' + key);
+    var token = String((+out.dataset.token || 0) + 1);
+    out.dataset.token = token;
+    out.hidden = false;
+    out.textContent = '';
+    var lines = [];
+    btn.disabled = true;
+    btn.textContent = 'กำลังรัน…';
+    runCode(CODE[key], function (line) {
+      if (out.dataset.token !== token) return;
+      lines.push(line);
+      out.textContent = lines.join('\n');
+    }).then(function () {
+      setTimeout(function () {
+        if (out.dataset.token === token) {
+          var all = lines.join(' ');
+          if (/EvalError|unsafe-eval|Content Security Policy/i.test(all)) out.textContent = 'หน้านี้ไม่อนุญาตให้รันโค้ดในเบราว์เซอร์ ดูผลลัพธ์ที่เขียนไว้ในคอมเมนต์ของโค้ดแทน';
+          else if (!lines.length) out.textContent = '(ไม่มีข้อความจาก console.log)';
+        }
+        btn.disabled = false;
+        btn.textContent = 'รันอีกครั้ง';
+      }, 1200);
+    });
+  }
+
+  function goTo(id) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    el.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+  }
+
+  function jumpTo(slug) {
+    state.view = 'tools'; state.lec = 'all'; state.q = '';
+    document.getElementById('q').value = '';
+    render();
+    var el = document.getElementById('i-' + slug);
+    goTo('i-' + slug);
+    if (el) { el.classList.add('flash'); setTimeout(function () { el.classList.remove('flash'); }, 1600); }
+  }
+
+  document.getElementById('main').addEventListener('click', function (e) {
+    var t = e.target.closest('[data-copy],[data-run],[data-tag],[data-jump]');
+    if (!t) return;
+    if (t.dataset.copy) copyCode(t.dataset.copy, t);
+    else if (t.dataset.run) runBlock(t.dataset.run, t);
+    else if (t.dataset.tag) {
+      state.q = t.dataset.tag;
+      document.getElementById('q').value = state.q;
+      render();
+      window.scrollTo({ top: 0 });
+    } else if (t.dataset.jump) jumpTo(t.dataset.jump);
+  });
+
+  document.getElementById('toc').addEventListener('click', function (e) {
+    var a = e.target.closest('[data-go]');
+    if (!a) return;
+    e.preventDefault();
+    goTo(a.dataset.go);
+    if (!window.matchMedia('(min-width: 900px)').matches) document.getElementById('toc').open = false;
+  });
+
+  document.getElementById('q').addEventListener('input', function (e) { state.q = e.target.value; render(); });
+  document.querySelectorAll('.tab').forEach(function (t) {
+    t.addEventListener('click', function () { state.view = t.dataset.view; render(); });
+  });
+  document.querySelectorAll('.chip').forEach(function (c) {
+    c.addEventListener('click', function () { state.lec = c.dataset.lec; render(); });
+  });
+  document.getElementById('theme').addEventListener('click', function () {
+    var root = document.documentElement;
+    var cur = root.getAttribute('data-theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    root.setAttribute('data-theme', cur === 'dark' ? 'light' : 'dark');
+  });
+
+  document.getElementById('toc').open = window.matchMedia('(min-width: 900px)').matches;
+  render();
+})();
+</script>
+
+</body></html>
